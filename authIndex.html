@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoLambada - Главная</title>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="header-nav">
+            <div class="header-logo">
+                <img src="images/logo.ico" alt="AutoLambada" width="40" height="40" class="header-logo-image">
+                <h1 class="header-title">AutoLambada</h1>
+            </div>
+            <div class="header-nav-links">
+                <a href="authIndex.html" class="header-nav-link active">Главное Меню</a>
+                <a href="news.html" class="header-nav-link">Новости</a>
+                <a href="profile.html" class="header-nav-link">Профиль</a>
+                <a href="index.html" class="header-nav-link">Выйти</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        <section class="index-filters-section">
+            <h2 class="index-filters-title">Фильтры</h2>
+            <form class="index-filter-form">
+                <div class="index-filter-group">
+                    <label class="index-filter-label">Коробка передач</label>
+                    <select class="index-filter-select">
+                        <option value="">Любая</option>
+                        <option value="automatic">Автоматическая</option>
+                        <option value="manual">Механическая</option>
+                        <option value="robot">Робот</option>
+                    </select>
+                </div>
+
+                <div class="index-filter-group">
+                    <label class="index-filter-label">Цвет</label>
+                    <!-- <select multiple class="index-filter-select"> -->
+                    <select class="index-filter-select">
+                        <option value="">Любой</option>
+                        <option value="black">Чёрный</option>
+                        <option value="white">Белый</option>
+                        <option value="silver">Серый</option>
+                        <option value="red">Красный</option>
+                        <option value="blue">Синий</option>
+                    </select>
+                </div>
+
+                <div class="index-filter-group">
+                    <label class="index-filter-label">Тип кузова</label>
+                    <select class="index-filter-select">
+                        <option value="">Любой</option>
+                        <option value="sedan">Седан</option>
+                        <option value="hatchback">Хэтчбек</option>
+                        <option value="suv">Внедорожник</option>
+                        <option value="coupe">Купе</option>
+                        <option value="minivan">Минивэн</option>
+                    </select>
+                </div>
+
+                <div class="index-filter-group">
+                    <label class="index-filter-label">Тип топлива</label>
+                    <select class="index-filter-select">
+                        <option value="">Любой</option>
+                        <option value="petrol">Бензин</option>
+                        <option value="diesel">Дизель</option>
+                        <option value="electric">Электро</option>
+                        <option value="hybrid">Гибрид</option>
+                    </select>
+                </div>
+
+                <!-- Улучшенные ползунки -->
+                <div class="index-filter-group">
+                    <label class="index-filter-label">Цена (₽)</label>
+                    <div class="range-slider-container">
+                        <input type="range" min="0" max="10000000" step="100000" value="0" class="range-slider range-min">
+                        <input type="range" min="0" max="10000000" step="100000" value="10000000" class="range-slider range-max">
+                    </div>
+                    <div class="range-slider-values">
+                        <span class="range-value" id="price-min">0 ₽</span>
+                        <span class="range-separator">-</span>
+                        <span class="range-value" id="price-max">10 000 000 ₽</span>
+                    </div>
+                </div>
+
+                <div class="index-filter-group">
+                    <label class="index-filter-label">Год выпуска</label>
+                    <div class="range-slider-container">
+                        <input type="range" min="1990" max="2025" step="1" value="1990" class="range-slider range-min">
+                        <input type="range" min="1990" max="2025" step="1" value="2025" class="range-slider range-max">
+                    </div>
+                    <div class="range-slider-values">
+                        <span class="range-value" id="year-min">1990</span>
+                        <span class="range-separator">-</span>
+                        <span class="range-value" id="year-max">2025</span>
+                    </div>
+                </div>
+
+                <div class="index-filter-group">
+                    <label class="index-filter-label">Максимальный пробег (км)</label>
+                    <input type="number" placeholder="До" class="index-filter-number" min="0" max="500000" step="1000">
+                </div>
+
+                <!-- Кнопки действий -->
+                <div class="filter-actions">
+                    <button type="reset" class="filter-reset-btn">Сбросить</button>
+                    <button type="submit" class="filter-apply-btn">Применить</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="index-cars-section">
+            <h2 class="index-cars-title">Автомобили в наличии</h2>
+            <div class="index-cars-grid">
+                <div class="index-car-card">
+                    <div class="index-car-card-photo-wrapper">
+                        <img src="images/cars/car1.jpg" alt="Toyota Camry 2022" width="300" height="200" class="index-car-card-image">
+                    </div>
+
+                    <div class="index-car-card-features">
+                        <span class="index-car-card-feature">+ Кондиционер</span>
+                        <span class="index-car-card-feature">+ Кожаный салон</span>
+                        <span class="index-car-card-feature">+ Парктроник</span>
+                    </div>
+
+                    <div class="index-car-card-header">
+                        <h3 class="index-car-card-price">1 850 000 ₽</h3>
+                        <button class="index-car-card-favorite-btn">🤍</button>
+                    </div>
+                    
+                    <h4 class="index-car-card-title">Toyota Camry XV70, 2022</h4>
+
+                    <div class="index-car-card-details">
+                        <span class="index-car-card-mileage">45 000 км</span>
+                        <span class="index-car-card-engine">2.5 л • 249 л.с • Бензин</span>
+                    </div>
+
+                    <div class="index-car-card-specs">
+                        <span class="index-car-card-transmission">Автоматическая</span>
+                        <span class="index-car-card-body-type">Седан</span>
+                        <span class="index-car-card-color">Чёрный</span>
+                    </div>
+                </div>
+
+                <div class="index-car-card">
+                    <div class="index-car-card-photo-wrapper">
+                        <img src="images/cars/car2.jpg" alt="BMW X5 2021" width="300" height="200" class="index-car-card-image">
+                    </div>
+
+                    <div class="index-car-card-features">
+                        <span class="index-car-card-feature">+ Панорамная крыша</span>
+                        <span class="index-car-card-feature">+ Подогрев сидений</span>
+                        <span class="index-car-card-feature">+ Камера 360</span>
+                    </div>
+
+                    <div class="index-car-card-header">
+                        <h3 class="index-car-card-price">3 450 000 ₽</h3>
+                        <button class="index-car-card-favorite-btn">🤍</button>
+                    </div>
+
+                    <h4 class="index-car-card-title">BMW X5 G05, 2022</h4>
+
+                    <div class="index-car-card-details">
+                        <span class="index-car-card-mileage">65 000 км</span>
+                        <span class="index-car-card-engine">3.0 л • 340 л.с • Дизель</span>
+                    </div>
+
+                    <div class="index-car-card-specs">
+                        <span class="index-car-card-transmission">Автоматическая</span>
+                        <span class="index-car-card-body-type">Внедорожник</span>
+                        <span class="index-car-card-color">Белый</span>
+                    </div>
+                </div>
+
+                <a href="carDetail.html" class="index-car-card-link">
+                    <div href="carDetail.html" class="index-car-card">
+                        <div class="index-car-card-photo-wrapper">
+                            <img src="images/cars/car3_0.jpg" alt="Kia Rio 2021" width="300" height="200" class="index-car-card-image">
+                        </div>
+
+                        <div class="index-car-card-features">
+                            <span class="index-car-card-feature">+ Кондиционер</span>
+                            <span class="index-car-card-feature">+ Мультимедиа</span>
+                            <span class="index-car-card-feature">+ Датчики света</span>
+                        </div>
+                        
+                        <div class="index-car-card-header">
+                            <h3 class="index-car-card-price">1 000 000 ₽</h3>
+                            <button class="index-car-card-favorite-btn">🤍</button>
+                        </div>
+
+                        <h4 class="index-car-card-title">Kia Rio, 2021</h4>
+
+                        <div class="index-car-card-details">
+                            <span class="index-car-card-mileage">176 000 км</span>
+                            <span class="index-car-card-engine">1.4 л • 100 л.с • Бензин</span>
+                        </div>
+
+                        <div class="index-car-card-specs">
+                            <span class="index-car-card-transmission">Автоматическая</span>
+                            <span class="index-car-card-body-type">Хэтчбек</span>
+                            <span class="index-car-card-color">Серый</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-contacts">
+            <h3 class="footer-contacts-title">Контакты</h3>
+            <p class="footer-contacts-phone">Телефон: +7 (999) 123-45-67</p>
+            <p class="footer-contacts-email">Email: info@autolambada.ru</p>
+            <p class="footer-contacts-address">Адрес: Самара, ул. Автомобильная, 1</p>
+        </div>
+        <div class="footer-about">
+            <a href="about.html" class="footer-about-link">О нас</a>
+        </div>
+    </footer>
+</body>
+</html>

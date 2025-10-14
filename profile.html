@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль - AutoLambada</title>
+    <link rel="stylesheet" href="css/profile.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="header-nav">
+            <div class="header-logo">
+                <img src="images/logo.ico" alt="AutoLambada" width="40" height="40" class="header-logo-image">
+                <h1 class="header-title">AutoLambada</h1>
+            </div>
+            <div class="header-nav-links">
+                <a href="authIndex.html" class="header-nav-link">Главное Меню</a>
+                <a href="news.html" class="header-nav-link">Новости</a>
+                <a href="profile.html" class="header-nav-link">Профиль</a>
+                <a href="index.html" class="header-nav-link">Выйти</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        <div class="profile-page">
+            <div class="profile-container">
+                <!-- Левая колонка - информация профиля -->
+                <div class="profile-left-block">
+                    <h3 class="profile-title">Профиль</h3>
+                    <div class="profile-icon">
+                        <img src="images/profile-icon.svg" alt="Профиль пользователя" class="profile-image" width="300" height="300">
+                    </div>
+                    <h2 class="profile-name">Алексей Иванов</h2>
+                    <p class="profile-status">Покупатель</p>
+                    
+                    <div class="profile-contacts">
+                        <p class="profile-phone">Телефон: +7 (912) 345-67-89</p>
+                        <p class="profile-email">Email: alexey.ivanov@mail.com</p>
+                    </div>
+
+                    <button onclick="window.location.href='index.html'" class="profile-logout-btn">
+                        Выйти
+                    </button>
+                </div>
+
+                <!-- Правая колонка - избранное -->
+                <div class="profile-right-block">
+                    <h1 class="profile-favourites-title">Избранное</h1>
+                    <div class="profile-cars-list">
+                        <!-- Карточка автомобиля 1 -->
+                        <div class="profile-car-card">
+                            <div class="profile-car-image-container">
+                                <img src="images/cars/car3_0.jpg" alt="Kia Rio" class="profile-car-image" width="120" height="100">
+                            </div>
+                            <div class="profile-car-info">
+                                <h3 class="profile-car-title">Kia Rio, 2021</h3>
+                                <div class="profile-car-details">
+                                    <p class="profile-car-price"><strong>Цена:</strong> 1 000 000 ₽</p>
+                                    <!-- <p class="profile-car-transmission"><strong>Коробка:</strong> Автомат</p>
+                                    <p class="profile-car-color"><strong>Цвет:</strong> Серый</p> -->
+                                </div>
+                            </div>
+                            <button class="profile-favorite-btn">❤️</button>
+                        </div>
+
+                        <!-- Карточка автомобиля 2 -->
+                        <div class="profile-car-card">
+                            <div class="profile-car-image-container">
+                                <img src="images/cars/car2.jpg" alt="BMW X5" class="profile-car-image" width="150" height="100">
+                            </div>
+                            <div class="profile-car-info">
+                                <h3 class="profile-car-title">BMW X5 G05, 2022</h3>
+                                <div class="profile-car-details">
+                                    <p class="profile-car-price"><strong>Цена:</strong> 3 450 000 ₽</p>
+                                    <!-- <p class="profile-car-transmission"><strong>Коробка:</strong> Автомат</p>
+                                    <p class="profile-car-color"><strong>Цвет:</strong> Белый</p> -->
+                                </div>
+                            </div>
+                            <button class="profile-favorite-btn">❤️</button>
+                        </div>
+
+                        <!-- Сообщение если нет избранных -->
+                        <!-- <div class="profile-no-cars">
+                            У вас пока нет избранных машин
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-contacts">
+            <h3 class="footer-contacts-title">Контакты</h3>
+            <p class="footer-contacts-phone">Телефон: +7 (999) 123-45-67</p>
+            <p class="footer-contacts-email">Email: info@autolambada.ru</p>
+            <p class="footer-contacts-address">Адрес: Самара, ул. Автомобильная, 1</p>
+        </div>
+        <div class="footer-about">
+            <a href="about.html" class="footer-about-link">О нас</a>
+        </div>
+    </footer>
+</body>
+</html>

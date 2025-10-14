@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoLambada - Регистрация</title>
+    <link rel="stylesheet" href="css/register.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="header-nav">
+            <div class="header-logo">
+                <img src="images/logo.ico" alt="AutoLambada" width="40" height="40" class="header-logo-image">
+                <h1 class="header-title">AutoLambada</h1>
+            </div>
+            <div class="header-nav-links">
+                <a href="index.html" class="header-nav-link">Главное Меню</a>
+                <a href="news.html" class="header-nav-link">Новости</a>
+                <a href="authEmail.html" class="header-nav-link">Войти</a>
+                <a href="profile.html" class="header-nav-link">Профиль</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        <div class="auth-container">
+            <div class="auth-card">
+                <h2 class="auth-title">Регистрация</h2>
+
+                <!-- Сообщения об ошибках (пока скрыты) -->
+                <div class="auth-error-messages" style="display: none;">
+                    <div class="auth-error-message">
+                        Пример сообщения об ошибке
+                    </div>
+                </div>
+
+                <form class="auth-form">
+                    <div class="auth-form-group">
+                        <label class="auth-form-label">Имя пользователя</label>
+                        <input
+                            type="text"
+                            placeholder="Ваше имя"
+                            class="auth-form-input"
+                            required
+                        />
+                    </div>
+
+                    <div class="auth-form-group">
+                        <label class="auth-form-label">Email</label>
+                        <input
+                            type="email"
+                            placeholder="example@mail.com"
+                            class="auth-form-input"
+                            required
+                        />
+                    </div>
+
+                    <div class="auth-form-group">
+                        <label class="auth-form-label">Номер телефона</label>
+                        <input
+                            type="tel"
+                            placeholder="+7 (___) ___-__-__"
+                            class="auth-form-input"
+                            required
+                        />
+                    </div>
+
+                    <div class="auth-form-group">
+                        <label class="auth-form-label">Пароль</label>
+                        <input
+                            type="password"
+                            placeholder="Придумайте пароль"
+                            class="auth-form-input"
+                            required
+                            id="password"
+                        />
+                        <div class="password-strength">
+                            <div class="password-strength-bar"></div>
+                        </div>
+                        <div class="password-strength-text">Слабый пароль</div>
+                        <div class="password-requirements">
+                            <ul>
+                                <li>Минимум 8 символов</li>
+                                <li>Хотя бы одна цифра</li>
+                                <li>Хотя бы один специальный символ</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="auth-form-group">
+                        <label class="auth-form-label">Подтвердите пароль</label>
+                        <input
+                            type="password"
+                            placeholder="Повторите пароль"
+                            class="auth-form-input"
+                            required
+                            id="confirm-password"
+                        />
+                        <div class="password-match">Пароли не совпадают</div>
+                    </div>
+
+                    <button type="submit" class="auth-submit-btn">
+                        Зарегистрироваться
+                    </button>
+                </form>
+
+                <div class="auth-footer">
+                    <span class="auth-footer-text">Уже есть аккаунт?</span>
+                    <a href="authEmail.html" class="auth-register-link">
+                        Войти
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-contacts">
+            <h3 class="footer-contacts-title">Контакты</h3>
+            <p class="footer-contacts-phone">Телефон: +7 (999) 123-45-67</p>
+            <p class="footer-contacts-email">Email: info@autolambada.ru</p>
+            <p class="footer-contacts-address">Адрес: Самара, ул. Автомобильная, 1</p>
+        </div>
+        <div class="footer-about">
+            <a href="about.html" class="footer-about-link">О нас</a>
+        </div>
+    </footer>
+</body>
+</html>
