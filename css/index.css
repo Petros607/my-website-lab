@@ -1,0 +1,197 @@
+/* css/index.css */
+@import url('header-footer.css');
+@import url('filters.css');
+
+.main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Cars Section */
+.index-cars-section {
+    margin-top: 2rem;
+}
+
+.index-cars-title {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 0.5rem;
+}
+
+.index-cars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.index-car-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+}
+
+.index-car-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+}
+
+.index-car-card-photo-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+.index-car-card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.index-car-card:hover .index-car-card-image {
+    transform: scale(1.05);
+}
+
+.index-car-card-features {
+    padding: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.index-car-card-feature {
+    background: #e8f4fd;
+    color: #2980b9;
+    padding: 0.3rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.index-car-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+    margin: 0.5rem 0;
+}
+
+.index-car-card-price {
+    color: #e74c3c;
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.index-car-card-favorite-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    padding: 0.3rem;
+    margin: 0;
+}
+
+.index-car-card-favorite-btn:hover {
+    transform: scale(1.2);
+}
+
+.index-car-card-title {
+    color: #2c3e50;
+    font-size: 1.1rem;
+    padding: 0 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.index-car-card-details {
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-bottom: 1rem;
+}
+
+.index-car-card-mileage,
+.index-car-card-engine {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.index-car-card-specs {
+    padding: 0 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.index-car-card-transmission,
+.index-car-card-body-type,
+.index-car-card-color {
+    background: #f8f9fa;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    color: #555;
+}
+
+.index-car-card-actions {
+    display: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header-nav {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .header-nav-links {
+        gap: 1rem;
+    }
+
+    .main {
+        padding: 1rem;
+    }
+
+    .index-filter-form {
+        grid-template-columns: 1fr;
+    }
+
+    .index-cars-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .index-car-card {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Стили для кликабельных карточек */
+.index-car-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.index-car-card-link .index-car-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.index-car-card-link .index-car-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.index-car-card-link:hover {
+    text-decoration: none;
+}
