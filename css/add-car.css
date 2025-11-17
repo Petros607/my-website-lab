@@ -167,3 +167,14 @@
         align-items: stretch;
     }
 }
+
+.error-msg {
+    color: #d9534f;
+    font-size: 12px;
+    margin-top: 3px;
+    min-height: 14px; /* Чтобы форма не прыгала */
+}
+
+.input-error {
+    border-color: #d9534f !important;
+}
