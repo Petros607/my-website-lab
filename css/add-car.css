@@ -65,6 +65,28 @@
     transition: border-color 0.3s ease;
 }
 
+.form-select {
+    height: 40px;
+}
+
+.engine-errors {
+    margin-top: 5px;
+}
+
+.engine-error {
+    color: #d63031;
+    font-size: 12px;
+    display: block;
+}
+
+.form-input-small.error {
+    border-color: #d63031;
+}
+
+.form-select.error {
+    border-color: #d63031;
+}
+
 .form-input:focus,
 .form-select:focus,
 .form-textarea:focus {
