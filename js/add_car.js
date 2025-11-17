@@ -1,10 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
-    setupPhotoPreview();
+    setupPhotoPreviewSimple();
     const form = document.getElementById("addCarForm");
 
     function setError(el, msg) {
-        // const group = el.closest(".form-group");
-        // const errorField = group.querySelector(".error-msg");
         const errorField = el.closest(".form-group").querySelector(".error-msg");
         el.classList.add("input-error");
         errorField.textContent = msg;
@@ -131,75 +129,83 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Функция для предпросмотра фотографий
-    function setupPhotoPreview() {
+    function setupPhotoPreviewSimple() {
         const photosInput = document.getElementById("carPhotos");
-        const photosPreview = document.getElementById("photosPreview");
         
         photosInput.addEventListener('change', function() {
-            photosPreview.innerHTML = '';
-            const files = this.files;
-            
-            if (files.length > 0) {
-                const counter = document.createElement('div');
-                counter.className = 'photo-counter';
-                counter.textContent = `Выбрано файлов: ${files.length}/5`;
-                photosPreview.appendChild(counter);
-            }
-            
-            // превью для каждого файла
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                
-                if (file.type.match('image.*')) {
-                    const reader = new FileReader();
-                    
-                    reader.onload = function(e) {
-                        const preview = document.createElement('div');
-                        preview.className = 'photo-preview';
-                        
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        img.alt = 'Preview';
-                        
-                        const removeBtn = document.createElement('button');
-                        removeBtn.className = 'photo-preview-remove';
-                        removeBtn.innerHTML = '×';
-                        removeBtn.title = 'Удалить';
-                        
-                        // Удаление фотографии из выбора
-                        removeBtn.addEventListener('click', function() {
-                            preview.remove();
-                            updateFileInput(files, i);
-                        });
-                        
-                        preview.appendChild(img);
-                        preview.appendChild(removeBtn);
-                        photosPreview.appendChild(preview);
-                    };
-                    
-                    reader.readAsDataURL(file);
-                }
-            }
+            renderPhotoPreviews(this.files);
         });
     }
 
-    // Вспомогательная функция для обновления FileInput при удалении превью
-    function updateFileInput(originalFiles, indexToRemove) {
-        const dt = new DataTransfer();
+    function renderPhotoPreviews(files) {
+        const photosPreview = document.getElementById("photosPreview");
+        photosPreview.innerHTML = '';
         
-        for (let i = 0; i < originalFiles.length; i++) {
-            if (i !== indexToRemove) {
-                dt.items.add(originalFiles[i]);
+        updatePhotoCounter(files.length);
+        
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            
+            if (file.type.match('image.*')) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const preview = document.createElement('div');
+                    preview.className = 'photo-preview';
+                    
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = 'Preview';
+                    
+                    const removeBtn = document.createElement('button');
+                    removeBtn.className = 'photo-preview-remove';
+                    removeBtn.innerHTML = '×';
+                    removeBtn.title = 'Удалить';
+                    
+                    removeBtn.addEventListener('click', function() {
+                        const photosInput = document.getElementById("carPhotos");
+                        const currentFiles = photosInput.files;
+                        
+                        const dt = new DataTransfer();
+                        let fileRemoved = false;
+                        
+                        for (let j = 0; j < currentFiles.length; j++) {
+                            const currentFile = currentFiles[j];
+                            if (fileRemoved || 
+                            (currentFile.name !== file.name || currentFile.size !== file.size)) {
+                                dt.items.add(currentFile);
+                            } else {
+                                fileRemoved = true;
+                            }
+                        }
+                        photosInput.files = dt.files;
+                        // Полностью перерисовываем все превью
+                        renderPhotoPreviews(dt.files);
+                    });
+                    
+                    preview.appendChild(img);
+                    preview.appendChild(removeBtn);
+                    photosPreview.appendChild(preview);
+                };
+                
+                reader.readAsDataURL(file);
             }
         }
-        
-        document.getElementById('carPhotos').files = dt.files;
-        
-        // Обновляем счетчик
+    }
+
+    function updatePhotoCounter(fileCount) {
         const photosPreview = document.getElementById("photosPreview");
-        const counter = photosPreview.querySelector('.photo-counter');
-        if (counter) {
-            counter.textContent = `Выбрано файлов: ${dt.files.length}/5`;
+        let counter = photosPreview.querySelector('.photo-counter');
+        
+        if (fileCount > 0) {
+            if (!counter) {
+                counter = document.createElement('div');
+                counter.className = 'photo-counter';
+                photosPreview.prepend(counter);
+            }
+            counter.textContent = `Выбрано файлов: ${fileCount}/5`;
+        } else if (counter) {
+            counter.remove();
         }
     }
 
@@ -270,12 +276,29 @@ document.addEventListener("DOMContentLoaded", () => {
         return valid;
     }
 
+    function scrollToFirstError() {
+    const firstErrorField = document.querySelector('.input-error, .error, .form-select.error');
+    
+    if (firstErrorField) {
+        const yOffset = -100; // Отступ в пикселях от верха
+        const y = firstErrorField.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        
+        window.scrollTo({
+            top: y,
+            behavior: 'smooth'
+        });
+        firstErrorField.focus();
+    }
+}
+
     form.addEventListener("submit", (e) => {
         e.preventDefault();
         var is_valid = validate()
         console.log(is_valid)
         if (validate()) {
             alert("Автомобиль успешно добавлен!");
+        } else {
+            scrollToFirstError();
         }
     });
     document.getElementById('carPhotos').addEventListener('change', validatePhotos);
