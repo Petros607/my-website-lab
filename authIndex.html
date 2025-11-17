@@ -25,10 +25,10 @@
     <main class="main">
         <section class="index-filters-section">
             <p class="index-filters-title">Автомобильные фильтры</p>
-            <form class="index-filter-form">
+            <form class="index-filter-form" id="filterForm">
                 <div class="index-filter-group">
                     <label class="index-filter-label">Коробка передач</label>
-                    <select class="index-filter-select">
+                    <select class="index-filter-select" id="filterTransmission">
                         <option value="">Любая</option>
                         <option value="automatic">Автоматическая</option>
                         <option value="manual">Механическая</option>
@@ -39,7 +39,7 @@
                 <div class="index-filter-group">
                     <label class="index-filter-label">Цвет</label>
                     <!-- <select multiple class="index-filter-select"> -->
-                    <select class="index-filter-select">
+                    <select class="index-filter-select" id="filterColor">
                         <option value="">Любой</option>
                         <option value="black">Чёрный</option>
                         <option value="white">Белый</option>
@@ -51,7 +51,7 @@
 
                 <div class="index-filter-group">
                     <label class="index-filter-label">Тип кузова</label>
-                    <select class="index-filter-select">
+                    <select class="index-filter-select" id="filterBodyType">
                         <option value="">Любой</option>
                         <option value="sedan">Седан</option>
                         <option value="hatchback">Хэтчбек</option>
@@ -63,7 +63,7 @@
 
                 <div class="index-filter-group">
                     <label class="index-filter-label">Тип топлива</label>
-                    <select class="index-filter-select">
+                    <select class="index-filter-select" id="filterFuelType">
                         <option value="">Любой</option>
                         <option value="petrol">Бензин</option>
                         <option value="diesel">Дизель</option>
@@ -75,8 +75,8 @@
                 <div class="index-filter-group">
                     <label class="index-filter-label">Цена (₽)</label>
                     <div class="range-slider-container">
-                        <input type="range" min="0" max="10000000" step="100000" value="0" class="range-slider range-min">
-                        <input type="range" min="0" max="10000000" step="100000" value="10000000" class="range-slider range-max">
+                        <input type="range" id="priceMin" min="0" max="10000000" step="100000" value="0" class="range-slider range-min">
+                        <input type="range" id="priceMax" min="0" max="10000000" step="100000" value="10000000" class="range-slider range-max">
                     </div>
                     <div class="range-slider-values">
                         <span class="range-value" id="price-min">0 ₽</span>
@@ -88,8 +88,8 @@
                 <div class="index-filter-group">
                     <label class="index-filter-label">Год выпуска</label>
                     <div class="range-slider-container">
-                        <input type="range" min="1990" max="2025" step="1" value="1990" class="range-slider range-min">
-                        <input type="range" min="1990" max="2025" step="1" value="2025" class="range-slider range-max">
+                        <input type="range" id="yearMin" min="1990" max="2025" step="1" value="1990" class="range-slider range-min">
+                        <input type="range" id="yearMax" min="1990" max="2025" step="1" value="2025" class="range-slider range-max">
                     </div>
                     <div class="range-slider-values">
                         <span class="range-value" id="year-min">1990</span>
@@ -100,7 +100,7 @@
 
                 <div class="index-filter-group">
                     <label class="index-filter-label">Максимальный пробег (км)</label>
-                    <input type="number" placeholder="До" class="index-filter-number" min="0" max="500000" step="1000">
+                    <input type="number" id="filterMileage" placeholder="До" class="index-filter-number" min="0" max="500000" step="1000">
                 </div>
 
                 <div class="filter-actions">
@@ -219,5 +219,6 @@
             <a href="about.html" class="footer-about-link">О нас</a>
         </div>
     </footer>
+    <script src="js/filters.js"></script>
 </body>
 </html>
