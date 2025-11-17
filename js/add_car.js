@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+    setupPhotoPreview();
     const form = document.getElementById("addCarForm");
 
     function setError(el, msg) {
@@ -24,7 +25,6 @@ document.addEventListener("DOMContentLoaded", () => {
         
         let errors = [];
         
-        // Сбрасываем стили ошибок
         engineVolume.classList.remove('error');
         enginePower.classList.remove('error');
         fuelType.classList.remove('error');
@@ -48,7 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
             fuelType.classList.add('error');
         }
 
-        // Показываем ошибки
         if (errors.length > 0) {
             errors.forEach(error => {
                 const errorElement = document.createElement('div');
@@ -60,6 +59,148 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         
         return true;
+    }
+
+    function validateDescription() {
+        const description = document.getElementById("carDescription");
+        const descriptionError = document.getElementById("descriptionError");
+        
+        description.classList.remove('error');
+        descriptionError.style.display = 'none';
+        
+        if (description.value.length > 500) {
+            description.classList.add('error');
+            descriptionError.textContent = "Описание не должно превышать 500 символов";
+            descriptionError.style.display = 'block';
+            return false;
+        }
+        
+        return true;
+    }
+
+    function validatePhotos() {
+        const photosInput = document.getElementById("carPhotos");
+        const photosError = document.getElementById("photosError");
+        const files = photosInput.files;
+        
+        photosInput.classList.remove('error');
+        photosError.style.display = 'none';
+        
+        if (files.length === 0) {
+            return true;
+        }
+        
+        if (files.length > 5) {
+            photosInput.classList.add('error');
+            photosError.textContent = "Можно загрузить не более 5 фотографий";
+            photosError.style.display = 'block';
+            return false;
+        }
+        
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            
+            if (!allowedTypes.includes(file.type)) {
+                photosInput.classList.add('error');
+                photosError.textContent = `Файл "${file.name}" не является изображением (разрешены JPG, PNG)`;
+                photosError.style.display = 'block';
+                return false;
+            }
+            
+            if (file.size > maxSize) {
+                photosInput.classList.add('error');
+                photosError.textContent = `Файл "${file.name}" слишком большой (максимум 5MB)`;
+                photosError.style.display = 'block';
+                return false;
+            }
+            
+            // Проверка на вирусы (базовая - по расширению)
+            const fileName = file.name.toLowerCase();
+            if (!fileName.match(/\.(jpg|jpeg|png)$/)) {
+                photosInput.classList.add('error');
+                photosError.textContent = `Недопустимое расширение файла "${file.name}"`;
+                photosError.style.display = 'block';
+                return false;
+            }
+        }
+        
+        return true;
+    }
+
+    // Функция для предпросмотра фотографий
+    function setupPhotoPreview() {
+        const photosInput = document.getElementById("carPhotos");
+        const photosPreview = document.getElementById("photosPreview");
+        
+        photosInput.addEventListener('change', function() {
+            photosPreview.innerHTML = '';
+            const files = this.files;
+            
+            if (files.length > 0) {
+                const counter = document.createElement('div');
+                counter.className = 'photo-counter';
+                counter.textContent = `Выбрано файлов: ${files.length}/5`;
+                photosPreview.appendChild(counter);
+            }
+            
+            // превью для каждого файла
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                
+                if (file.type.match('image.*')) {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        const preview = document.createElement('div');
+                        preview.className = 'photo-preview';
+                        
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.alt = 'Preview';
+                        
+                        const removeBtn = document.createElement('button');
+                        removeBtn.className = 'photo-preview-remove';
+                        removeBtn.innerHTML = '×';
+                        removeBtn.title = 'Удалить';
+                        
+                        // Удаление фотографии из выбора
+                        removeBtn.addEventListener('click', function() {
+                            preview.remove();
+                            updateFileInput(files, i);
+                        });
+                        
+                        preview.appendChild(img);
+                        preview.appendChild(removeBtn);
+                        photosPreview.appendChild(preview);
+                    };
+                    
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+    }
+
+    // Вспомогательная функция для обновления FileInput при удалении превью
+    function updateFileInput(originalFiles, indexToRemove) {
+        const dt = new DataTransfer();
+        
+        for (let i = 0; i < originalFiles.length; i++) {
+            if (i !== indexToRemove) {
+                dt.items.add(originalFiles[i]);
+            }
+        }
+        
+        document.getElementById('carPhotos').files = dt.files;
+        
+        // Обновляем счетчик
+        const photosPreview = document.getElementById("photosPreview");
+        const counter = photosPreview.querySelector('.photo-counter');
+        if (counter) {
+            counter.textContent = `Выбрано файлов: ${dt.files.length}/5`;
+        }
     }
 
     function validate() {
@@ -109,7 +250,9 @@ document.addEventListener("DOMContentLoaded", () => {
             valid = false;
         } else clearError(transmission);
 
-        valid = validateEngine();
+        if (!validateEngine()) {
+            valid = false;
+        }
 
         // Цвет: только буквы, минимум 3 символа
         const color = document.getElementById("color");
@@ -118,13 +261,23 @@ document.addEventListener("DOMContentLoaded", () => {
             valid = false;
         } else clearError(color);
 
+        if (!validateDescription()) {
+            valid = false;
+        }
+        if (!validatePhotos()) {
+            valid = false;
+        }
         return valid;
     }
 
     form.addEventListener("submit", (e) => {
         e.preventDefault();
+        var is_valid = validate()
+        console.log(is_valid)
         if (validate()) {
             alert("Автомобиль успешно добавлен!");
         }
     });
+    document.getElementById('carPhotos').addEventListener('change', validatePhotos);
+    document.getElementById('carDescription').addEventListener('input', validateDescription);
 });

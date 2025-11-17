@@ -117,15 +117,17 @@
                         
                         <div class="form-group">
                             <label class="form-label">Дополнительные опции и описание</label>
-                            <textarea class="form-textarea" placeholder="Не битый, есть сабвуфер, зимняя резина, тонировка..." rows="4"></textarea>
-                            <small class="error-msg"></small>
+                            <textarea id="carDescription" class="form-textarea" placeholder="Не битый, есть сабвуфер, зимняя резина, тонировка..." rows="4"></textarea>
+                            <small class="form-help">Максимум 500 символов</small>
+                            <div class="error-msg" id="descriptionError"></div>
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">Фотографии автомобиля</label>
-                            <input type="file" class="form-file" multiple accept="image/*">
-                            <small class="form-help">Можно выбрать несколько фотографий</small>
-                            <small class="error-msg"></small>
+                            <input type="file" class="form-file" id="carPhotos" multiple accept="image/*">
+                            <small class="form-help">Можно выбрать несколько фотографий (максимум 5 файлов, до 5MB каждый, только JPG/PNG)</small>
+                            <div class="error-msg" id="photosError"></div>
+                            <div id="photosPreview" class="photos-preview"></div>
                         </div>
                     </div>
 
