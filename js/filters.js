@@ -5,58 +5,36 @@ document.addEventListener("DOMContentLoaded", () => {
 function initializeFilters() {
     setupRangeSliders();
     setupFilterEvents();
-    setupFavoriteButtons();
 }
 
 // 1. Настройка range-слайдеров
 function setupRangeSliders() {
-    // Слайдеры цены
+    updatePriceDisplay();
+    updateYearDisplay();
+}
+
+function updatePriceDisplay() {
     const priceMin = document.getElementById('priceMin');
     const priceMax = document.getElementById('priceMax');
     const priceMinValue = document.getElementById('price-min');
     const priceMaxValue = document.getElementById('price-max');
 
-    if (priceMin && priceMax) {
-        [priceMin, priceMax].forEach(slider => {
-            slider.addEventListener('input', function() {
-                updatePriceDisplay();
-                applyFilters(); // Автоматическое применение фильтров
-            });
-        });
+    if (priceMin && priceMax && priceMinValue && priceMaxValue) {
+        priceMinValue.textContent = formatPrice(priceMin.value);
+        priceMaxValue.textContent = formatPrice(priceMax.value);
     }
+}
 
-    // Слайдеры года
+function updateYearDisplay() {
     const yearMin = document.getElementById('yearMin');
     const yearMax = document.getElementById('yearMax');
     const yearMinValue = document.getElementById('year-min');
     const yearMaxValue = document.getElementById('year-max');
 
-    if (yearMin && yearMax) {
-        [yearMin, yearMax].forEach(slider => {
-            slider.addEventListener('input', function() {
-                updateYearDisplay();
-                applyFilters(); // Автоматическое применение фильтров
-            });
-        });
+    if (yearMin && yearMax && yearMinValue && yearMaxValue) {
+        yearMinValue.textContent = yearMin.value;
+        yearMaxValue.textContent = yearMax.value;
     }
-
-    function updatePriceDisplay() {
-        if (priceMinValue && priceMaxValue) {
-            priceMinValue.textContent = formatPrice(priceMin.value);
-            priceMaxValue.textContent = formatPrice(priceMax.value);
-        }
-    }
-
-    function updateYearDisplay() {
-        if (yearMinValue && yearMaxValue) {
-            yearMinValue.textContent = yearMin.value;
-            yearMaxValue.textContent = yearMax.value;
-        }
-    }
-
-    // Инициализация отображения
-    updatePriceDisplay();
-    updateYearDisplay();
 }
 
 function formatPrice(price) {
@@ -69,6 +47,30 @@ function setupFilterEvents() {
     const filterSelects = document.querySelectorAll('.index-filter-select');
     const mileageInput = document.getElementById('filterMileage');
     const resetBtn = document.querySelector('.filter-reset-btn');
+
+    // События для слайдеров
+    const priceMin = document.getElementById('priceMin');
+    const priceMax = document.getElementById('priceMax');
+    const yearMin = document.getElementById('yearMin');
+    const yearMax = document.getElementById('yearMax');
+
+    if (priceMin && priceMax) {
+        [priceMin, priceMax].forEach(slider => {
+            slider.addEventListener('input', function() {
+                updatePriceDisplay();
+                applyFilters();
+            });
+        });
+    }
+
+    if (yearMin && yearMax) {
+        [yearMin, yearMax].forEach(slider => {
+            slider.addEventListener('input', function() {
+                updateYearDisplay();
+                applyFilters();
+            });
+        });
+    }
 
     // События для выпадающих списков
     filterSelects.forEach(select => {
@@ -83,11 +85,25 @@ function setupFilterEvents() {
     // Событие для кнопки сброса
     if (resetBtn) {
         resetBtn.addEventListener('click', function() {
-            setTimeout(applyFilters, 100); // Даем время на сброс формы
+            setTimeout(() => {
+                updatePriceDisplay();
+                updateYearDisplay();
+                applyFilters();
+            }, 10);
         });
     }
 
-    // Предотвращаем отправку формы
+    // Обработчик события reset формы
+    if (filterForm) {
+        filterForm.addEventListener('reset', function() {
+            setTimeout(() => {
+                updatePriceDisplay();
+                updateYearDisplay();
+                applyFilters();
+            }, 10);
+        });
+    }
+
     if (filterForm) {
         filterForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -193,37 +209,24 @@ function extractCarData(carElement) {
 
 // 6. Проверка автомобиля по фильтрам
 function checkCarAgainstFilters(car, filters) {
-    // Проверка коробки передач
     if (filters.transmission && car.transmission !== filters.transmission) {
         return false;
     }
-
-    // Проверка цвета
     if (filters.color && car.color !== filters.color) {
         return false;
     }
-
-    // Проверка типа кузова
     if (filters.bodyType && car.bodyType !== filters.bodyType) {
         return false;
     }
-
-    // Проверка типа топлива
     if (filters.fuelType && car.fuelType !== filters.fuelType) {
         return false;
     }
-
-    // Проверка цены
     if (car.price < filters.priceMin || car.price > filters.priceMax) {
         return false;
     }
-
-    // Проверка года
     if (car.year < filters.yearMin || car.year > filters.yearMax) {
         return false;
     }
-
-    // Проверка пробега
     if (filters.maxMileage && car.mileage > filters.maxMileage) {
         return false;
     }
@@ -250,37 +253,13 @@ function updateResultsCounter(count) {
     }
 }
 
-// 8. Кнопки избранного (дополнительный функционал)
-function setupFavoriteButtons() {
-    const favoriteBtns = document.querySelectorAll('.index-car-card-favorite-btn');
-    
-    favoriteBtns.forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            // Простая анимация сердечка
-            if (this.textContent === '🤍') {
-                this.textContent = '❤️';
-                this.style.transform = 'scale(1.2)';
-                setTimeout(() => {
-                    this.style.transform = 'scale(1)';
-                }, 200);
-            } else {
-                this.textContent = '🤍';
-            }
-        });
-    });
-}
-
-// 9. Добавляем данные-атрибуты для упрощения фильтрации (опционально)
+// 8. данные-атрибуты для упрощения фильтрации
 function enhanceCarCards() {
     const cars = document.querySelectorAll('.index-car-card');
     
     cars.forEach((car, index) => {
         const carData = extractCarData(car);
         
-        // Добавляем data-атрибуты для упрощения фильтрации
         car.dataset.transmission = carData.transmission;
         car.dataset.bodyType = carData.bodyType;
         car.dataset.color = carData.color;
@@ -291,5 +270,4 @@ function enhanceCarCards() {
     });
 }
 
-// Инициализируем улучшение карточек при загрузке
 setTimeout(enhanceCarCards, 100);
