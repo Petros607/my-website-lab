@@ -220,11 +220,11 @@ document.addEventListener("DOMContentLoaded", () => {
             valid = false;
         } else clearError(carModel);
 
-        // Год выпуска: диапазон 1990–2025
+        // Год выпуска: диапазон 1960–2025
         const carYear = document.getElementById("carYear");
         const year = Number(carYear.value);
-        if (year < 1990 || year > 2025) {
-            setError(carYear, "Год должен быть в диапазоне 1990–2025.");
+        if (year < 1960 || year > 2025) {
+            setError(carYear, "Год должен быть в диапазоне 1960–2025.");
             valid = false;
         } else clearError(carYear);
 
@@ -262,7 +262,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Цвет: только буквы, минимум 3 символа
         const color = document.getElementById("color");
-        if (!/^[А-Яа-яA-Za-z]{3,}$/.test(color.value)) {
+        if (!/^[А-Яа-яA-Za-z\-]{3,}$/.test(color.value)) {
             setError(color, "Введите корректный цвет (минимум 3 буквы).");
             valid = false;
         } else clearError(color);
