@@ -13,10 +13,8 @@
                 <img src="images/logo.ico" alt="AutoLambada" width="40" height="40" class="header-logo-image">
                 <p class="header-title">AutoLambada</p>
             </div>
-            <div class="header-nav-links">
-                <a href="authIndex.html" class="header-nav-link active">Главное Меню</a>
-                <a href="news.html" class="header-nav-link">Новости</a>
-                <a href="authPhone.html" class="header-nav-link">Войти</a>
+            <div class="header-nav-links" id="navLinks">
+                <!-- Навигация будет динамически меняться через JS -->
             </div>
         </nav>
     </header>
@@ -24,27 +22,21 @@
     <main class="main">
         <section class="index-filters-section">
             <p class="index-filters-title">Автомобильные фильтры</p>
+            
             <form class="index-filter-form" id="filterForm">
                 <div class="index-filter-group">
                     <label class="index-filter-label">Коробка передач</label>
                     <select class="index-filter-select" id="filterTransmission">
                         <option value="">Любая</option>
-                        <option value="automatic">Автоматическая</option>
-                        <option value="manual">Механическая</option>
-                        <option value="robot">Робот</option>
+                        <!-- Опции будут загружаться из БД (transmission_types) -->
                     </select>
                 </div>
 
                 <div class="index-filter-group">
                     <label class="index-filter-label">Цвет</label>
-                    <!-- <select multiple class="index-filter-select"> -->
                     <select class="index-filter-select" id="filterColor">
                         <option value="">Любой</option>
-                        <option value="black">Чёрный</option>
-                        <option value="white">Белый</option>
-                        <option value="silver">Серый</option>
-                        <option value="red">Красный</option>
-                        <option value="blue">Синий</option>
+                        <!-- Цвета будут загружаться из БД (уникальные значения из cars.color) -->
                     </select>
                 </div>
 
@@ -52,11 +44,7 @@
                     <label class="index-filter-label">Тип кузова</label>
                     <select class="index-filter-select" id="filterBodyType">
                         <option value="">Любой</option>
-                        <option value="sedan">Седан</option>
-                        <option value="hatchback">Хэтчбек</option>
-                        <option value="suv">Внедорожник</option>
-                        <option value="coupe">Купе</option>
-                        <option value="minivan">Минивэн</option>
+                        <!-- Опции будут загружаться из БД (body_types) -->
                     </select>
                 </div>
 
@@ -64,10 +52,7 @@
                     <label class="index-filter-label">Тип топлива</label>
                     <select class="index-filter-select" id="filterFuelType">
                         <option value="">Любой</option>
-                        <option value="petrol">Бензин</option>
-                        <option value="diesel">Дизель</option>
-                        <option value="electric">Электро</option>
-                        <option value="hybrid">Гибрид</option>
+                        <!-- Опции будут загружаться из БД (fuel_types) -->
                     </select>
                 </div>
 
@@ -116,111 +101,25 @@
 
                 <div class="filter-actions">
                     <button type="reset" class="filter-reset-btn">Сбросить</button>
-                    <!-- <button type="submit" class="filter-apply-btn">Применить</button> -->
+                    <button type="submit" class="filter-apply-btn">Применить</button>
                 </div>
             </form>
         </section>
 
         <section class="index-cars-section">
             <h1 class="index-cars-title">Автомобили в наличии</h1>
-            <div class="index-cars-grid">
-                <div class="index-car-card">
-                    <div class="index-car-card-photo-wrapper">
-                        <img src="images/cars/car1.jpg" alt="Toyota Camry 2022" width="300" height="200" class="index-car-card-image">
-                    </div>
-
-                    <div class="index-car-card-features">
-                        <span class="index-car-card-feature">+ Кондиционер</span>
-                        <span class="index-car-card-feature">+ Кожаный салон</span>
-                        <span class="index-car-card-feature">+ Парктроник</span>
-                    </div>
-
-                    <div class="index-car-card-header">
-                        <p class="index-car-card-price">1 850 000 ₽</p>
-                        <button class="index-car-card-favorite-btn">🤍</button>
-                    </div>
-                    
-                    <h2 class="index-car-card-title">Toyota Camry XV70, 2022</h2>
-
-                    <div class="index-car-card-details">
-                        <span class="index-car-card-mileage">45 000 км</span>
-                        <span class="index-car-card-engine">2.5 л • 249 л.с • Бензин</span>
-                    </div>
-
-                    <div class="index-car-card-specs">
-                        <span class="index-car-card-transmission">Автоматическая</span>
-                        <span class="index-car-card-body-type">Седан</span>
-                        <span class="index-car-card-color">Чёрный</span>
-                    </div>
-                </div>
-
-                <div class="index-car-card">
-                    <div class="index-car-card-photo-wrapper">
-                        <img src="images/cars/car2.jpg" alt="BMW X5 2021" width="300" height="200" class="index-car-card-image">
-                    </div>
-
-                    <div class="index-car-card-features">
-                        <span class="index-car-card-feature">+ Панорамная крыша</span>
-                        <span class="index-car-card-feature">+ Подогрев сидений</span>
-                        <span class="index-car-card-feature">+ Камера 360</span>
-                    </div>
-
-                    <div class="index-car-card-header">
-                        <p class="index-car-card-price">3 450 000 ₽</p>
-                        <button class="index-car-card-favorite-btn">🤍</button>
-                    </div>
-
-                    <h2 class="index-car-card-title">BMW X5 G05, 2022</h2>
-
-                    <div class="index-car-card-details">
-                        <span class="index-car-card-mileage">65 000 км</span>
-                        <span class="index-car-card-engine">3.0 л • 340 л.с • Дизель</span>
-                    </div>
-
-                    <div class="index-car-card-specs">
-                        <span class="index-car-card-transmission">Автоматическая</span>
-                        <span class="index-car-card-body-type">Внедорожник</span>
-                        <span class="index-car-card-color">Белый</span>
-                    </div>
-                </div>
-
-                <a href="carDetail.html" class="index-car-card-link">
-                    <div href="carDetail.html" class="index-car-card">
-                        <div class="index-car-card-photo-wrapper">
-                            <img src="images/cars/car3_0.jpg" alt="Kia Rio 2021" width="300" height="200" class="index-car-card-image">
-                        </div>
-
-                        <div class="index-car-card-features">
-                            <span class="index-car-card-feature">+ Кондиционер</span>
-                            <span class="index-car-card-feature">+ Мультимедиа</span>
-                            <span class="index-car-card-feature">+ Датчики света</span>
-                        </div>
-                        
-                        <div class="index-car-card-header">
-                            <p class="index-car-card-price">1 000 000 ₽</p>
-                            <button class="index-car-card-favorite-btn">🤍</button>
-                        </div>
-
-                        <h2 class="index-car-card-title">Kia Rio, 2021</h2>
-
-                        <div class="index-car-card-details">
-                            <span class="index-car-card-mileage">176 000 км</span>
-                            <span class="index-car-card-engine">1.4 л • 100 л.с • Бензин</span>
-                        </div>
-
-                        <div class="index-car-card-specs">
-                            <span class="index-car-card-transmission">Автоматическая</span>
-                            <span class="index-car-card-body-type">Хэтчбек</span>
-                            <span class="index-car-card-color">Серый</span>
-                        </div>
-                    </div>
-                </a>
+            <div class="index-cars-grid" id="carsGrid">
+                <!-- Автомобили будут загружаться из БД через JS -->
             </div>
-
-            <div class="index-cars-load-more-container">
+            
+            <div class="index-cars-load-more-container" id="loadMoreContainer">
                 <button id="load-more-btn" class="index-cars-load-more-btn">
                     Загрузить ещё
                 </button>
+            </div>
+            
+            <div class="index-cars-not-found" id="noCarsMessage" style="display: none;">
+                <p>Автомобили не найдены</p>
             </div>
         </section>
     </main>
@@ -236,7 +135,43 @@
             <a href="about.html" class="footer-about-link">О нас</a>
         </div>
     </footer>
+    
+    <!-- Шаблон для карточки автомобиля (будет использоваться JS) -->
+    <template id="carCardTemplate">
+        <a href="carDetail.html" class="index-car-card-link">
+            <div class="index-car-card">
+                <div class="index-car-card-photo-wrapper">
+                    <img src="" alt="" width="300" height="200" class="index-car-card-image">
+                </div>
+
+                <div class="index-car-card-features" id="carFeatures">
+                    <!-- Особенности будут добавляться динамически -->
+                </div>
+
+                <div class="index-car-card-header">
+                    <p class="index-car-card-price"></p>
+                    <button class="index-car-card-favorite-btn" data-car-id="">🤍</button>
+                </div>
+                
+                <h2 class="index-car-card-title"></h2>
+
+                <div class="index-car-card-details">
+                    <span class="index-car-card-mileage"></span>
+                    <span class="index-car-card-engine"></span>
+                </div>
+
+                <div class="index-car-card-specs">
+                    <span class="index-car-card-transmission"></span>
+                    <span class="index-car-card-body-type"></span>
+                    <span class="index-car-card-color"></span>
+                </div>
+            </div>
+        </a>
+    </template>
+
+    <script src="js/api.js"></script>
     <script src="js/filters.js"></script>
     <script src="js/hearts.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
