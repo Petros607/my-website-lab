@@ -215,3 +215,146 @@
     from { transform: translateX(0); opacity: 1; }
     to { transform: translateX(100%); opacity: 0; }
 }
+
+.index-cars-load-more-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+/* Стили кнопки загрузки */
+.index-cars-load-more-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.index-cars-load-more-btn:hover {
+    background-color: #45a049;
+}
+
+.index-cars-load-more-btn:active {
+    transform: translateY(1px);
+}
+
+/* Стиль для загрузки */
+.index-cars-load-more-btn.loading {
+    background-color: #999;
+    cursor: wait;
+}
+
+/* Стиль когда авто закончились */
+.index-cars-load-more-btn.hidden {
+    display: none;
+}
+
+/* Поле поиска */
+
+.search-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.index-search-input {
+    width: 210%;
+    padding: 12px 15px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.index-filter-number {
+    padding: 12px 15px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.index-search-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+}
+
+.search-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    display: none;
+}
+
+.search-suggestions.active {
+    display: block;
+}
+
+.suggestion-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #eee;
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item:hover {
+    background-color: #f0f7ff;
+}
+
+.suggestion-item mark {
+    background-color: #ffeeba;
+    font-weight: 500;
+    padding: 2px 0;
+}
+
+.suggestion-category {
+    font-size: 12px;
+    color: #666;
+    margin-left: 10px;
+}
+
+.suggestion-loading,
+.suggestion-error,
+.suggestion-no-results {
+    padding: 15px;
+    text-align: center;
+    color: #666;
+    font-style: italic;
+}
+
+.suggestion-error {
+    color: #dc3545;
+}
+
+/* Анимация загрузки */
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+.suggestion-loading {
+    animation: pulse 1.5s infinite;
+}
