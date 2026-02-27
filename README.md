@@ -18,3 +18,17 @@
 - **HTML5** - семантическая разметка
 - **CSS3** - адаптивный дизайн, Grid, Flexbox
 - **Чистый код** - без JavaScript
+
+## Запуск сервера
+
+``` bash
+cd server
+node server.js
+```
+
+## Запуск фронта
+
+``` bash
+cd frontend
+http-server
+```
