@@ -102,6 +102,18 @@
                     <input type="number" id="filterMileage" placeholder="До" class="index-filter-number" min="0" max="500000" step="1000">
                 </div>
 
+                <div class="index-filter-group">
+                    <label class="index-filter-label">Поиск по марке и модели</label>
+                    <div class="search-wrapper">
+                        <input type="text" 
+                            id="searchInput" 
+                            class="index-search-input" 
+                            placeholder="Введите марку или модель (например, Toyota, Camry...)"
+                            autocomplete="off">
+                        <div id="searchSuggestions" class="search-suggestions"></div>
+                    </div>
+                </div>
+
                 <div class="filter-actions">
                     <button type="reset" class="filter-reset-btn">Сбросить</button>
                     <!-- <button type="submit" class="filter-apply-btn">Применить</button> -->
@@ -203,6 +215,12 @@
                         </div>
                     </div>
                 </a>
+            </div>
+
+            <div class="index-cars-load-more-container">
+                <button id="load-more-btn" class="index-cars-load-more-btn">
+                    Загрузить ещё
+                </button>
             </div>
         </section>
     </main>
