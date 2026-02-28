@@ -120,6 +120,8 @@ async function loginUser(login, password) {
         // Сохраняем токен и данные пользователя
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
+
+        window.dispatchEvent(new Event('storage'));
         
         // Показываем сообщение об успехе
         showSuccess('Вход выполнен успешно!');
