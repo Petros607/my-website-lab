@@ -43,28 +43,50 @@ router.post('/register', async (req, res) => {
     }
 });
 
+// Унифицированный вход (поддерживает и email, и телефон)
 router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+    const { login, password } = req.body; // login может быть email или телефоном
 
-    if (!email || !password)
-        return res.status(400).json({ error: 'Введите email и пароль' });
+    if (!login || !password) {
+        return res.status(400).json({ error: 'Введите логин (email или телефон) и пароль' });
+    }
 
     try {
-        const user = await pool.query(
-            'SELECT * FROM users WHERE email = $1',
-            [email]
-        );
+        let user;
+        
+        // Проверяем, является ли login email-ом
+        const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+        const isEmail = emailRegex.test(login);
+        
+        if (isEmail) {
+            // Поиск по email
+            user = await pool.query(
+                'SELECT * FROM users WHERE email = $1',
+                [login]
+            );
+        } else {
+            // Поиск по телефону (очищаем от форматирования)
+            const cleanPhone = login.replace(/[\s\-\(\)\+]/g, '');
+            
+            // Ищем по оригинальному формату или очищенному
+            user = await pool.query(
+                'SELECT * FROM users WHERE phone = $1 OR REPLACE(REPLACE(REPLACE(REPLACE(phone, \' \', \'\'), \'-\', \'\'), \'(\', \'\'), \')\', \'\') = $2',
+                [login, cleanPhone]
+            );
+        }
 
-        if (user.rows.length === 0)
-            return res.status(400).json({ error: 'Неверный email или пароль' });
+        if (user.rows.length === 0) {
+            return res.status(400).json({ error: 'Неверный логин или пароль' });
+        }
 
         const validPassword = await bcrypt.compare(
             password,
             user.rows[0].password_hash
         );
 
-        if (!validPassword)
-            return res.status(400).json({ error: 'Неверный email или пароль' });
+        if (!validPassword) {
+            return res.status(400).json({ error: 'Неверный логин или пароль' });
+        }
 
         const token = jwt.sign(
             {
@@ -82,6 +104,7 @@ router.post('/login', async (req, res) => {
                 id: user.rows[0].id,
                 username: user.rows[0].username,
                 email: user.rows[0].email,
+                phone: user.rows[0].phone,
                 role: user.rows[0].role
             }
         });
