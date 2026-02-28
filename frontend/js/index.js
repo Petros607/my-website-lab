@@ -9,6 +9,37 @@ let currentPage = 1;
 const PAGE_SIZE = 6;
 
 // ------------------------
+// Range-слайдеры: обновление отображения
+// ------------------------
+function formatPrice(price) {
+    return new Intl.NumberFormat('ru-RU').format(price) + ' ₽';
+}
+
+function updatePriceDisplay() {
+    const priceMin = document.getElementById('priceMin');
+    const priceMax = document.getElementById('priceMax');
+    const priceMinValue = document.getElementById('price-min');
+    const priceMaxValue = document.getElementById('price-max');
+
+    if (priceMin && priceMax && priceMinValue && priceMaxValue) {
+        priceMinValue.textContent = formatPrice(priceMin.value);
+        priceMaxValue.textContent = formatPrice(priceMax.value);
+    }
+}
+
+function updateYearDisplay() {
+    const yearMin = document.getElementById('yearMin');
+    const yearMax = document.getElementById('yearMax');
+    const yearMinValue = document.getElementById('year-min');
+    const yearMaxValue = document.getElementById('year-max');
+
+    if (yearMin && yearMax && yearMinValue && yearMaxValue) {
+        yearMinValue.textContent = yearMin.value;
+        yearMaxValue.textContent = yearMax.value;
+    }
+}
+
+// ------------------------
 // Загрузка справочников и фильтров
 // ------------------------
 async function loadLookups() {
@@ -16,12 +47,10 @@ async function loadLookups() {
         const res = await fetch(`${API_URL}/filters`);
         const data = await res.json();
 
-        // Заполняем селекты
         fillSelect('filterTransmission', data.transmissions);
         fillSelect('filterBodyType', data.bodies);
         fillSelect('filterFuelType', data.fuels);
 
-        // Цвета из уникальных значений
         colors = data.colors || [];
         const colorSelect = document.getElementById('filterColor');
         colors.forEach(c => {
@@ -31,7 +60,6 @@ async function loadLookups() {
             colorSelect.appendChild(option);
         });
 
-        // Создаём мапы для отображения в карточках
         data.transmissions.forEach(t => transmissionMap[t.id] = t.name);
         data.bodies.forEach(b => bodyTypeMap[b.id] = b.name);
         data.fuels.forEach(f => fuelsMap[f.id] = f.name);
@@ -65,12 +93,9 @@ async function loadCars(reset = true) {
 
         renderCars(carsData);
 
-        // Показать или скрыть кнопку "Загрузить ещё"
         const loadMoreBtn = document.getElementById('load-more-btn');
-        if (data.length < PAGE_SIZE) loadMoreBtn.style.display = 'none';
-        else loadMoreBtn.style.display = 'block';
+        loadMoreBtn.style.display = (data.length < PAGE_SIZE) ? 'none' : 'block';
 
-        // Сообщение "не найдено"
         document.getElementById('noCarsMessage').style.display = carsData.length ? 'none' : 'block';
 
     } catch (err) {
@@ -80,7 +105,6 @@ async function loadCars(reset = true) {
 
 function buildFilterParams() {
     const params = new URLSearchParams();
-
     const transmission = document.getElementById('filterTransmission').value;
     const bodyType = document.getElementById('filterBodyType').value;
     const fuelType = document.getElementById('filterFuelType').value;
@@ -119,11 +143,7 @@ function renderCars(cars) {
         const card = template.content.cloneNode(true);
 
         const img = card.querySelector('.index-car-card-image');
-        if (car.photos && car.photos.length) {
-            img.src = `${API_URL}${car.photos[0].photo_url}`;
-        } else {
-            img.src = `${API_URL}/uploads/default-car.jpg`;
-        }
+        img.src = (car.photos && car.photos.length) ? `${API_URL}${car.photos[0].photo_url}` : `${API_URL}/uploads/default-car.jpg`;
         img.alt = car.brand_model;
 
         card.querySelector('.index-car-card-title').textContent = car.brand_model;
@@ -135,32 +155,124 @@ function renderCars(cars) {
         card.querySelector('.index-car-card-transmission').textContent = transmissionMap[car.transmission_id] || 'Неизвестно';
         card.querySelector('.index-car-card-body-type').textContent = bodyTypeMap[car.body_type_id] || 'Неизвестно';
 
+        // Добавляем кнопки избранного с уведомлением
         const favBtn = card.querySelector('.index-car-card-favorite-btn');
         favBtn.dataset.carId = car.id;
-        favBtn.addEventListener('click', () => {
-            favBtn.textContent = favBtn.textContent === '🤍' ? '❤️' : '🤍';
+        favBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleFavorite(favBtn);
         });
+
 
         grid.appendChild(card);
     });
 }
 
 // ------------------------
-// События фильтров
+// Фильтры и слайдеры
 // ------------------------
 function setupFilterEvents() {
     const filterForm = document.getElementById('filterForm');
 
+    // Submit формы
     filterForm.addEventListener('submit', e => {
         e.preventDefault();
         currentPage = 1;
         loadCars(true);
     });
 
+    // Reset формы
+    filterForm.addEventListener('reset', () => {
+        setTimeout(() => {
+            updatePriceDisplay();
+            updateYearDisplay();
+            currentPage = 1;
+            loadCars(true);
+        }, 10);
+    });
+
+    // Load more
     document.getElementById('load-more-btn').addEventListener('click', () => {
         currentPage++;
         loadCars(false);
     });
+
+    // Слайдеры
+    const priceMin = document.getElementById('priceMin');
+    const priceMax = document.getElementById('priceMax');
+    const yearMin = document.getElementById('yearMin');
+    const yearMax = document.getElementById('yearMax');
+
+    [priceMin, priceMax].forEach(slider => {
+        slider.addEventListener('input', updatePriceDisplay);
+    });
+
+    [yearMin, yearMax].forEach(slider => {
+        slider.addEventListener('input', updateYearDisplay);
+    });
+}
+
+// ------------------------
+// Избранное (heart.js)
+// ------------------------
+function toggleFavorite(btn) {
+    const isFavorite = btn.textContent === '❤️';
+    
+    if (isFavorite) {
+        btn.textContent = '🤍';
+        btn.style.transform = 'scale(0.8)';
+        showNotification('Убрано из избранного', 'info');
+    } else {
+        btn.textContent = '❤️';
+        btn.style.animation = 'heartBeat 0.6s ease';
+        showNotification('Добавлено в избранное', 'success');
+        saveToFavorites(btn);
+    }
+    
+    setTimeout(() => {
+        btn.style.transform = 'scale(1)';
+        btn.style.animation = '';
+    }, 600);
+}
+
+function saveToFavorites(btn) {
+    const carCard = btn.closest('.index-car-card');
+    const carTitle = carCard.querySelector('.index-car-card-title').textContent;
+    const carPrice = carCard.querySelector('.index-car-card-price').textContent;
+    
+    const favorites = JSON.parse(localStorage.getItem('carFavorites') || '[]');
+    favorites.push({
+        title: carTitle,
+        price: carPrice,
+        timestamp: new Date().toISOString()
+    });
+    
+    localStorage.setItem('carFavorites', JSON.stringify(favorites));
+}
+
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+    notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        background: ${type === 'success' ? '#4CAF50' : '#2196F3'};
+        color: white;
+        padding: 15px 20px;
+        border-radius: 5px;
+        z-index: 1000;
+        animation: slideIn 0.3s ease;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
 }
 
 // ------------------------
@@ -168,6 +280,8 @@ function setupFilterEvents() {
 // ------------------------
 document.addEventListener('DOMContentLoaded', async () => {
     await loadLookups();
+    updatePriceDisplay();
+    updateYearDisplay();
     setupFilterEvents();
     loadCars();
 });

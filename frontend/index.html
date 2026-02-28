@@ -13,7 +13,6 @@
                 <img src="images/logo.ico" alt="AutoLambada" width="40" height="40" class="header-logo-image">
                 <p class="header-title">AutoLambada</p>
             </div>
-            <a href="addCar.html" class="header-nav-link">Добавить авто</a>
             <div class="header-nav-links" id="navLinks">
                 <!-- Навигация будет динамически меняться через JS -->
             </div>
@@ -73,13 +72,13 @@
                 <div class="index-filter-group">
                     <label class="index-filter-label">Год выпуска</label>
                     <div class="range-slider-container">
-                        <input type="range" id="yearMin" min="1990" max="2025" step="1" value="1990" class="range-slider range-min">
-                        <input type="range" id="yearMax" min="1990" max="2025" step="1" value="2025" class="range-slider range-max">
+                        <input type="range" id="yearMin" min="1960" max="2026" step="1" value="1960" class="range-slider range-min">
+                        <input type="range" id="yearMax" min="1960" max="2026" step="1" value="2026" class="range-slider range-max">
                     </div>
                     <div class="range-slider-values">
-                        <span class="range-value" id="year-min">1990</span>
+                        <span class="range-value" id="year-min">1960</span>
                         <span class="range-separator">-</span>
-                        <span class="range-value" id="year-max">2025</span>
+                        <span class="range-value" id="year-max">2026</span>
                     </div>
                 </div>
 
@@ -170,10 +169,6 @@
         </a>
     </template>
 
-    <!-- <script src="js/api.js"></script>
-    <script src="js/filters.js"></script>
-    <script src="js/hearts.js"></script>
-    <script src="js/main.js"></script> -->
     <script src="js/index.js"></script>
 </body>
 </html>
