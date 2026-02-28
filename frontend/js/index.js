@@ -8,57 +8,6 @@ let carsData = [];
 let currentPage = 1;
 const PAGE_SIZE = 6;
 
-// // ------------------------
-// // Динамическая навигация
-// // ------------------------
-// function updateNavigation() {
-//     const navLinks = document.getElementById('navLinks');
-//     if (!navLinks) return;
-
-//     // Проверяем, авторизован ли пользователь
-//     const token = localStorage.getItem('token');
-//     const isAuthenticated = !!token;
-
-//     // Определяем текущую страницу для подсветки активной ссылки
-//     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-
-//     if (isAuthenticated) {
-//         // Навигация для авторизованного пользователя
-//         navLinks.innerHTML = `
-//             <a href="index.html" class="header-nav-link ${currentPage === 'index.html' ? 'active' : ''}">Главное Меню</a>
-//             <a href="news.html" class="header-nav-link ${currentPage === 'news.html' ? 'active' : ''}">Новости</a>
-//             <a href="profile.html" class="header-nav-link ${currentPage === 'profile.html' ? 'active' : ''}">Профиль</a>
-//         `;
-//     } else {
-//         // Навигация для неавторизованного пользователя
-//         navLinks.innerHTML = `
-//             <a href="index.html" class="header-nav-link ${currentPage === 'index.html' ? 'active' : ''}">Главное Меню</a>
-//             <a href="news.html" class="header-nav-link ${currentPage === 'news.html' ? 'active' : ''}">Новости</a>
-//             <a href="authPhone.html" class="header-nav-link ${currentPage === 'authPhone.html' || currentPage === 'authEmail.html' || currentPage === 'register.html' ? 'active' : ''}">Войти</a>
-//         `;
-//     }
-// }
-
-// // Добавляем функцию для проверки авторизации (можно использовать в других местах)
-// function isAuthenticated() {
-//     return !!localStorage.getItem('token');
-// }
-
-// // Функция для выхода из аккаунта
-// function logout() {
-//     localStorage.removeItem('token');
-//     localStorage.removeItem('user');
-//     updateNavigation(); // Обновляем навигацию
-//     window.location.href = 'index.html'; // Перенаправляем на главную
-// }
-
-// // Слушаем изменения в localStorage (на случай, если пользователь открыл несколько вкладок)
-// window.addEventListener('storage', (e) => {
-//     if (e.key === 'token' || e.key === 'user') {
-//         updateNavigation();
-//     }
-// });
-
 // ------------------------
 // Range-слайдеры: обновление отображения
 // ------------------------
@@ -428,7 +377,6 @@ function showNotification(message, type = 'info') {
 // Инициализация
 // ------------------------
 document.addEventListener('DOMContentLoaded', async () => {
-    // updateNavigation();
     await loadLookups();
     initializeSliders();
     setupFilterEvents();
