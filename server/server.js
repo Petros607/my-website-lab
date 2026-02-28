@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 // Делаем папку uploads публичной
-app.use('/uploads', express.static('uploads'));
+app.use('/api/uploads', express.static('uploads'));
 
 app.use('/api/filters', filtersRouter);
 app.use('/api/cars', carsRouter);
