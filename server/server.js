@@ -3,6 +3,7 @@ const cors = require('cors');
 
 const filtersRouter = require('./routes/filters');
 const carsRouter = require('./routes/cars');
+const authRoutes = require('./routes/auth');
 
 const app = express();
 const PORT = 3000;
@@ -15,6 +16,7 @@ app.use('/api/uploads', express.static('uploads'));
 
 app.use('/api/filters', filtersRouter);
 app.use('/api/cars', carsRouter);
+app.use('/api/auth', authRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
