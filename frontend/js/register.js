@@ -54,7 +54,7 @@ function validateForm() {
     if (!/\d/.test(password))
         errors.push("Пароль должен содержать хотя бы одну цифру");
 
-    if (!/[!@#$%^&*]/.test(password))
+    if (!/[!@#$%^&_*]/.test(password))
         errors.push("Пароль должен содержать специальный символ");
 
     if (password !== confirmPassword)
