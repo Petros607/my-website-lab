@@ -27,13 +27,18 @@ const upload = multer({
 router.get('/', async (req, res) => {
     try {
         const {
-            transmission,
+            transmission_id,
             color,
-            bodyType,
-            fuelType,
-            minPrice,
-            maxPrice,
-            search
+            body_type_id,
+            fuel_type_id,
+            price_min,
+            price_max,
+            mileage_max,
+            year_min,
+            year_max,
+            search,
+            page = 1,
+            limit = 6
         } = req.query;
 
         let query = `
@@ -49,34 +54,64 @@ router.get('/', async (req, res) => {
         `;
 
         const values = [];
-        let index = 1;
+        let idx = 1;
 
-        if (transmission) {
-            query += ` AND c.transmission_id = $${index++}`;
-            values.push(transmission);
+        if (transmission_id) {
+            query += ` AND c.transmission_id = $${idx++}`;
+            values.push(transmission_id);
+        }
+
+        if (body_type_id) {
+            query += ` AND c.body_type_id = $${idx++}`;
+            values.push(body_type_id);
+        }
+
+        if (fuel_type_id) {
+            query += ` AND c.fuel_type_id = $${idx++}`;
+            values.push(fuel_type_id);
         }
 
         if (color) {
-            query += ` AND c.color = $${index++}`;
+            query += ` AND c.color = $${idx++}`;
             values.push(color);
         }
 
-        if (minPrice) {
-            query += ` AND c.price >= $${index++}`;
-            values.push(minPrice);
+        if (price_min) {
+            query += ` AND c.price >= $${idx++}`;
+            values.push(price_min);
         }
 
-        if (maxPrice) {
-            query += ` AND c.price <= $${index++}`;
-            values.push(maxPrice);
+        if (price_max) {
+            query += ` AND c.price <= $${idx++}`;
+            values.push(price_max);
+        }
+
+        if (mileage_max) {
+            query += ` AND c.mileage <= $${idx++}`;
+            values.push(mileage_max);
+        }
+
+        if (year_min) {
+            query += ` AND c.year >= $${idx++}`;
+            values.push(year_min);
+        }
+
+        if (year_max) {
+            query += ` AND c.year <= $${idx++}`;
+            values.push(year_max);
         }
 
         if (search) {
-            query += ` AND c.brand_model ILIKE $${index++}`;
+            query += ` AND c.brand_model ILIKE $${idx++}`;
             values.push(`%${search}%`);
         }
 
         query += ` GROUP BY c.id ORDER BY c.id DESC`;
+
+        // Пагинация
+        const offset = (page - 1) * limit;
+        query += ` LIMIT $${idx++} OFFSET $${idx++}`;
+        values.push(limit, offset);
 
         const result = await pool.query(query, values);
         res.json(result.rows);
