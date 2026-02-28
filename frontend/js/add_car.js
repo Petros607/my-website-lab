@@ -35,20 +35,30 @@ function fillSelect(selectId, items) {
 // ------------------------
 // Предпросмотр фото
 // ------------------------
+let selectedFiles = []; // глобально, все выбранные файлы
+
 function setupPhotoPreview() {
     const photosInput = document.getElementById('carPhotos');
+
     photosInput.addEventListener('change', function () {
-        renderPhotoPreviews(this.files);
+        // Добавляем новые файлы в массив
+        for (let i = 0; i < this.files.length; i++) {
+            const file = this.files[i];
+            if (!selectedFiles.includes(file)) selectedFiles.push(file);
+        }
+        renderPhotoPreviews();
     });
 }
 
-function renderPhotoPreviews(files) {
+function renderPhotoPreviews() {
     const photosPreview = document.getElementById('photosPreview');
-    photosPreview.innerHTML = '';
-    updatePhotoCounter(files.length);
+    const photosInput = document.getElementById('carPhotos');
 
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
+    photosPreview.innerHTML = '';
+    updatePhotoCounter(selectedFiles.length);
+
+    for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
         if (!file.type.match('image.*')) continue;
 
         const reader = new FileReader();
@@ -66,12 +76,9 @@ function renderPhotoPreviews(files) {
             removeBtn.title = 'Удалить';
 
             removeBtn.addEventListener('click', function () {
-                const dt = new DataTransfer();
-                for (let j = 0; j < files.length; j++) {
-                    if (files[j] !== file) dt.items.add(files[j]);
-                }
-                document.getElementById('carPhotos').files = dt.files;
-                renderPhotoPreviews(dt.files);
+                selectedFiles.splice(i, 1);
+                photosInput.value = '';
+                renderPhotoPreviews();
             });
 
             preview.appendChild(img);
@@ -81,6 +88,7 @@ function renderPhotoPreviews(files) {
         reader.readAsDataURL(file);
     }
 }
+
 
 function updatePhotoCounter(count) {
     const photosPreview = document.getElementById('photosPreview');
@@ -195,7 +203,6 @@ function initForm() {
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-
         if (!validateForm()) return scrollToFirstError();
 
         const formData = new FormData();
@@ -211,8 +218,8 @@ function initForm() {
         formData.append('color', document.getElementById('color').value);
         formData.append('additional_info', document.getElementById('additionalInfo').value);
 
-        const files = document.getElementById('carPhotos').files;
-        for (let i = 0; i < files.length; i++) formData.append('photos', files[i]);
+        // Добавляем все файлы из массива
+        selectedFiles.forEach(file => formData.append('photos', file));
 
         try {
             const res = await fetch(`${API_URL}/cars`, { method: 'POST', body: formData });
