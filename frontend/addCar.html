@@ -27,7 +27,7 @@
             <div class="add-car-card">
                 <p class="add-car-title">Добавление автомобиля</p>
 
-                <form id="addCarForm" class="add-car-form">
+                <form id="addCarForm" class="add-car-form" enctype="multipart/form-data">
                     <div class="form-section">
                         <p class="form-section-title">Основная информация</p>
                         
@@ -73,10 +73,6 @@
                                 <span>л.с /</span>
                                 <select id="fuelType" class="form-select" >
                                     <option value="">Тип топлива</option>
-                                    <option value="petrol">Бензин</option>
-                                    <option value="diesel">Дизель</option>
-                                    <option value="electric">Электро</option>
-                                    <option value="hybrid">Гибрид</option>
                                 </select>
                             </div>
                             <small class="form-help">Объем: 0.8 - 8.0л, Мощность: 30 - 1000 л.с.</small>
@@ -87,24 +83,14 @@
                             <label class="form-label">Кузов *</label>
                             <select id="bodyType" class="form-select" >
                                 <option value="">Выберите тип кузова</option>
-                                <option value="sedan">Седан</option>
-                                <option value="hatchback">Хэтчбек</option>
-                                <option value="suv">Внедорожник</option>
-                                <option value="coupe">Купе</option>
-                                <option value="minivan">Минивэн</option>
-                                <option value="universal">Универсал</option>
                             </select>
                             <small class="error-msg"></small>
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">Коробка передач *</label>
-                            <select id="transmission" class="form-select" >
+                            <select id="transmissionType" class="form-select" >
                                 <option value="">Выберите коробку</option>
-                                <option value="automatic">Автоматическая</option>
-                                <option value="manual">Механическая</option>
-                                <option value="robot">Робот</option>
-                                <option value="variator">Вариатор</option>
                             </select>
                             <small class="error-msg"></small>
                         </div>
@@ -122,14 +108,20 @@
                         
                         <div class="form-group">
                             <label class="form-label">Дополнительные опции и описание</label>
-                            <textarea id="carDescription" class="form-textarea" placeholder="Не битый, есть сабвуфер, зимняя резина, тонировка..." rows="4"></textarea>
+                            <textarea id="additionalInfo" class="form-textarea" placeholder="Не битый, есть сабвуфер, зимняя резина, тонировка..." rows="4"></textarea>
                             <small class="form-help">Максимум 500 символов.</small>
                             <div class="error-msg" id="descriptionError"></div>
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">Фотографии автомобиля</label>
-                            <input type="file" class="form-file" id="carPhotos" multiple accept="image/*">
+                            <input 
+                                type="file" 
+                                class="form-file" 
+                                id="carPhotos" 
+                                name="photos" 
+                                multiple 
+                                accept="image/jpeg,image/png">
                             <small class="form-help">Можно выбрать несколько фотографий (максимум 5 файлов, до 5MB каждый, только JPG/PNG).</small>
                             <div class="error-msg" id="photosError"></div>
                             <div id="photosPreview" class="photos-preview"></div>

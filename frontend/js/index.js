@@ -1,17 +1,19 @@
 const API_URL = 'http://localhost:3000/api';
 
-async function loadTransmissionTypes() {
-    const res = await fetch(`${API_URL}/transmission-types`);
-    const data = await res.json();
+let transmissionMap = {};
+let bodyTypeMap = {};
 
-    const select = document.getElementById('filterTransmission');
+async function loadLookups() {
+    const [transmissionsRes, bodyTypesRes] = await Promise.all([
+        fetch(`${API_URL}/transmission-types`),
+        fetch(`${API_URL}/body-types`)
+    ]);
 
-    data.forEach(type => {
-        const option = document.createElement('option');
-        option.value = type.id;
-        option.textContent = type.name;
-        select.appendChild(option);
-    });
+    const transmissions = await transmissionsRes.json();
+    const bodyTypes = await bodyTypesRes.json();
+
+    transmissions.forEach(t => transmissionMap[t.id] = t.name);
+    bodyTypes.forEach(b => bodyTypeMap[b.id] = b.name);
 }
 
 async function loadCars() {
@@ -22,16 +24,31 @@ async function loadCars() {
     grid.innerHTML = '';
 
     cars.forEach(car => {
-        const div = document.createElement('div');
-        div.innerHTML = `
-            <h3>${car.brand} ${car.model}</h3>
-            <p>${car.price} ₽</p>
-        `;
-        grid.appendChild(div);
+        const template = document.getElementById('carCardTemplate');
+        const card = template.content.cloneNode(true);
+
+        // Фото
+        const img = card.querySelector('.index-car-card-image');
+        img.src = ''; 
+        img.alt = car.brand_model;
+
+        // Основные данные
+        card.querySelector('.index-car-card-title').textContent = car.brand_model;
+        card.querySelector('.index-car-card-price').textContent = Number(car.price).toLocaleString('ru-RU') + ' ₽';
+        card.querySelector('.index-car-card-mileage').textContent = car.mileage.toLocaleString() + ' км';
+        card.querySelector('.index-car-card-engine').textContent = `${car.engine_volume} л / ${car.engine_power} л.с`;
+        card.querySelector('.index-car-card-color').textContent = car.color;
+
+        // Кузов и коробка
+        card.querySelector('.index-car-card-transmission').textContent = transmissionMap[car.transmission_id] || 'Неизвестно';
+        card.querySelector('.index-car-card-body-type').textContent = bodyTypeMap[car.body_type_id] || 'Неизвестно';
+
+        grid.appendChild(card);
     });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    loadTransmissionTypes();
-    loadCars();
+// Загружаем все данные при загрузке страницы
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadLookups();
+    await loadCars();
 });
