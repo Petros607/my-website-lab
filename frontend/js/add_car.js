@@ -2,21 +2,28 @@ const API_URL = 'http://localhost:3000/api';
 
 document.addEventListener('DOMContentLoaded', () => {
     loadSelects();
+    setupPhotoPreview();
     initForm();
 });
 
+// ------------------------
+// Загрузка опций селектов
+// ------------------------
 async function loadSelects() {
-    const res = await fetch(`${API_URL}/filters`);
-    const data = await res.json();
+    try {
+        const res = await fetch(`${API_URL}/filters`);
+        const data = await res.json();
 
-    fillSelect('fuelType', data.fuels);
-    fillSelect('bodyType', data.bodies);
-    fillSelect('transmissionType', data.transmissions);
+        fillSelect('fuelType', data.fuels);
+        fillSelect('bodyType', data.bodies);
+        fillSelect('transmissionType', data.transmissions);
+    } catch (err) {
+        console.error('Ошибка загрузки фильтров:', err);
+    }
 }
 
 function fillSelect(selectId, items) {
     const select = document.getElementById(selectId);
-
     items.forEach(item => {
         const option = document.createElement('option');
         option.value = item.id;
@@ -25,14 +32,173 @@ function fillSelect(selectId, items) {
     });
 }
 
+// ------------------------
+// Предпросмотр фото
+// ------------------------
+function setupPhotoPreview() {
+    const photosInput = document.getElementById('carPhotos');
+    photosInput.addEventListener('change', function () {
+        renderPhotoPreviews(this.files);
+    });
+}
+
+function renderPhotoPreviews(files) {
+    const photosPreview = document.getElementById('photosPreview');
+    photosPreview.innerHTML = '';
+    updatePhotoCounter(files.length);
+
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (!file.type.match('image.*')) continue;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const preview = document.createElement('div');
+            preview.className = 'photo-preview';
+
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.alt = 'Preview';
+
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'photo-preview-remove';
+            removeBtn.innerHTML = '×';
+            removeBtn.title = 'Удалить';
+
+            removeBtn.addEventListener('click', function () {
+                const dt = new DataTransfer();
+                for (let j = 0; j < files.length; j++) {
+                    if (files[j] !== file) dt.items.add(files[j]);
+                }
+                document.getElementById('carPhotos').files = dt.files;
+                renderPhotoPreviews(dt.files);
+            });
+
+            preview.appendChild(img);
+            preview.appendChild(removeBtn);
+            photosPreview.appendChild(preview);
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+function updatePhotoCounter(count) {
+    const photosPreview = document.getElementById('photosPreview');
+    let counter = photosPreview.querySelector('.photo-counter');
+    if (count > 0) {
+        if (!counter) {
+            counter = document.createElement('div');
+            counter.className = 'photo-counter';
+            photosPreview.prepend(counter);
+        }
+        counter.textContent = `Выбрано файлов: ${count}/5`;
+    } else if (counter) counter.remove();
+}
+
+// ------------------------
+// Валидация формы
+// ------------------------
+function setError(el, msg) {
+    const errorField = el.closest('.form-group').querySelector('.error-msg');
+    el.classList.add('input-error');
+    errorField.textContent = msg;
+}
+
+function clearError(el) {
+    const errorField = el.closest('.form-group').querySelector('.error-msg');
+    el.classList.remove('input-error');
+    errorField.textContent = '';
+}
+
+function validateEngine() {
+    const engineVolume = document.getElementById('engineVolume');
+    const enginePower = document.getElementById('enginePower');
+    const fuelType = document.getElementById('fuelType');
+    const engineErrors = document.getElementById('engineErrors');
+    engineErrors.innerHTML = '';
+    let errors = [];
+
+    if (!/^\d+(\.\d)?$/.test(engineVolume.value)) errors.push("Введите объём двигателя (например, 1.6)");
+    if (!enginePower.value || parseInt(enginePower.value) < 30) errors.push("Мощность должна быть не менее 30 л.с.");
+    if (!fuelType.value) errors.push("Выберите тип топлива");
+
+    errors.forEach(err => {
+        const div = document.createElement('div');
+        div.className = 'engine-error';
+        div.textContent = err;
+        engineErrors.appendChild(div);
+    });
+
+    if (errors.length) return false;
+    return true;
+}
+
+function validatePhotos() {
+    const photosInput = document.getElementById('carPhotos');
+    const photosError = document.getElementById('photosError');
+    const files = photosInput.files;
+    photosInput.classList.remove('error');
+    photosError.style.display = 'none';
+
+    if (files.length > 5) {
+        photosInput.classList.add('error');
+        photosError.textContent = "Можно загрузить не более 5 фотографий";
+        photosError.style.display = 'block';
+        return false;
+    }
+
+    const allowedTypes = ['image/jpeg', 'image/png'];
+    const maxSize = 5 * 1024 * 1024;
+
+    for (let i = 0; i < files.length; i++) {
+        const f = files[i];
+        if (!allowedTypes.includes(f.type) || f.size > maxSize) {
+            photosInput.classList.add('error');
+            photosError.textContent = `Файл "${f.name}" недопустим или слишком большой`;
+            photosError.style.display = 'block';
+            return false;
+        }
+    }
+    return true;
+}
+
+function validateForm() {
+    let valid = true;
+
+    const model = document.getElementById('carModel');
+    if (!/^[А-Яа-яA-Za-z0-9\s\-]{3,}$/.test(model.value.trim())) { setError(model, "Введите корректную марку и модель (≥3 символов)"); valid = false; } 
+    else clearError(model);
+
+    const year = Number(document.getElementById('carYear').value);
+    if (year < 1960 || year > new Date().getFullYear()) { setError(document.getElementById('carYear'), "Год выпуска некорректен"); valid = false; } 
+    else clearError(document.getElementById('carYear'));
+
+    if (!validateEngine()) valid = false;
+    if (!validatePhotos()) valid = false;
+
+    const bodyType = document.getElementById('bodyType');
+    if (!bodyType.value) { setError(bodyType, "Выберите кузов"); valid = false; } 
+    else clearError(bodyType);
+
+    const transmission = document.getElementById('transmissionType');
+    if (!transmission.value) { setError(transmission, "Выберите коробку"); valid = false; } 
+    else clearError(transmission);
+
+    return valid;
+}
+
+// ------------------------
+// Отправка формы
+// ------------------------
 function initForm() {
     const form = document.getElementById('addCarForm');
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const formData = new FormData();
+        if (!validateForm()) return scrollToFirstError();
 
+        const formData = new FormData();
         formData.append('brand_model', document.getElementById('carModel').value);
         formData.append('year', document.getElementById('carYear').value);
         formData.append('price', document.getElementById('carPrice').value);
@@ -46,21 +212,24 @@ function initForm() {
         formData.append('additional_info', document.getElementById('additionalInfo').value);
 
         const files = document.getElementById('carPhotos').files;
+        for (let i = 0; i < files.length; i++) formData.append('photos', files[i]);
 
-        for (let i = 0; i < files.length; i++) {
-            formData.append('photos', files[i]);
-        }
-
-        const res = await fetch(`${API_URL}/cars`, {
-            method: 'POST',
-            body: formData
-        });
-
-        if (res.ok) {
-            alert('Автомобиль добавлен!');
-            window.location.href = 'index.html';
-        } else {
-            alert('Ошибка добавления');
+        try {
+            const res = await fetch(`${API_URL}/cars`, { method: 'POST', body: formData });
+            if (res.ok) {
+                alert('Автомобиль успешно добавлен!');
+                window.location.href = 'index.html';
+            } else throw new Error('Ошибка сервера');
+        } catch (err) {
+            alert('Не удалось добавить автомобиль');
+            console.error(err);
         }
     });
+}
+
+function scrollToFirstError() {
+    const firstError = document.querySelector('.input-error, .error');
+    if (!firstError) return;
+    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    firstError.focus();
 }
