@@ -48,11 +48,6 @@ function initializeSliders() {
         priceMaxEl.textContent = formatPrice(max);
     });
 
-    // priceSlider.noUiSlider.on('change', () => {
-    //     currentPage = 1;
-    //     loadCars(true);
-    // });
-
     // -----------------
     // Год
     // -----------------
@@ -81,11 +76,6 @@ function initializeSliders() {
         yearMinEl.textContent = min;
         yearMaxEl.textContent = max;
     });
-
-    // yearSlider.noUiSlider.on('change', () => {
-    //     currentPage = 1;
-    //     loadCars(true);
-    // });
 }
 
 
