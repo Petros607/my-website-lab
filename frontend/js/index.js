@@ -15,29 +15,85 @@ function formatPrice(price) {
     return new Intl.NumberFormat('ru-RU').format(price) + ' ₽';
 }
 
-function updatePriceDisplay() {
-    const priceMin = document.getElementById('priceMin');
-    const priceMax = document.getElementById('priceMax');
-    const priceMinValue = document.getElementById('price-min');
-    const priceMaxValue = document.getElementById('price-max');
+function initializeSliders() {
 
-    if (priceMin && priceMax && priceMinValue && priceMaxValue) {
-        priceMinValue.textContent = formatPrice(priceMin.value);
-        priceMaxValue.textContent = formatPrice(priceMax.value);
-    }
+    // -----------------
+    // Цена
+    // -----------------
+    const priceSlider = document.getElementById('priceSlider');
+
+    noUiSlider.create(priceSlider, {
+        start: [0, 10000000],
+        connect: true,
+        step: 100000,
+        range: {
+            min: 0,
+            max: 10000000
+        }
+    });
+
+    const priceMinEl = document.getElementById('priceMin');
+    const priceMaxEl = document.getElementById('priceMax');
+
+    priceSlider.noUiSlider.on('update', (values) => {
+        const min = Math.round(values[0]);
+        const max = Math.round(values[1]);
+
+        // сохраняем значение для фильтра
+        priceMinEl.value = min;
+        priceMaxEl.value = max;
+
+        // отображаем красиво
+        priceMinEl.textContent = formatPrice(min);
+        priceMaxEl.textContent = formatPrice(max);
+    });
+
+    // priceSlider.noUiSlider.on('change', () => {
+    //     currentPage = 1;
+    //     loadCars(true);
+    // });
+
+    // -----------------
+    // Год
+    // -----------------
+    const yearSlider = document.getElementById('yearSlider');
+
+    noUiSlider.create(yearSlider, {
+        start: [1960, 2026],
+        connect: true,
+        step: 1,
+        range: {
+            min: 1960,
+            max: 2026
+        }
+    });
+
+    const yearMinEl = document.getElementById('yearMin');
+    const yearMaxEl = document.getElementById('yearMax');
+
+    yearSlider.noUiSlider.on('update', (values) => {
+        const min = Math.round(values[0]);
+        const max = Math.round(values[1]);
+
+        yearMinEl.value = min;
+        yearMaxEl.value = max;
+
+        yearMinEl.textContent = min;
+        yearMaxEl.textContent = max;
+    });
+
+    // yearSlider.noUiSlider.on('change', () => {
+    //     currentPage = 1;
+    //     loadCars(true);
+    // });
 }
 
-function updateYearDisplay() {
-    const yearMin = document.getElementById('yearMin');
-    const yearMax = document.getElementById('yearMax');
-    const yearMinValue = document.getElementById('year-min');
-    const yearMaxValue = document.getElementById('year-max');
 
-    if (yearMin && yearMax && yearMinValue && yearMaxValue) {
-        yearMinValue.textContent = yearMin.value;
-        yearMaxValue.textContent = yearMax.value;
-    }
+// Функция форматирования цены
+function formatPrice(price) {
+    return new Intl.NumberFormat('ru-RU').format(price) + ' ₽';
 }
+
 
 // ------------------------
 // Загрузка справочников и фильтров
@@ -94,7 +150,7 @@ async function loadCars(reset = true) {
         renderCars(carsData);
 
         const loadMoreBtn = document.getElementById('load-more-btn');
-        loadMoreBtn.style.display = (data.length < PAGE_SIZE) ? 'none' : 'block';
+        loadMoreBtn.style.display = (data.length <= PAGE_SIZE) ? 'none' : 'block';
 
         document.getElementById('noCarsMessage').style.display = carsData.length ? 'none' : 'block';
 
@@ -233,8 +289,10 @@ function setupFilterEvents() {
     // Reset формы
     filterForm.addEventListener('reset', () => {
         setTimeout(() => {
-            updatePriceDisplay();
-            updateYearDisplay();
+            const priceSlider = document.getElementById('priceSlider');
+            priceSlider.noUiSlider.set([0, 10000000]);
+            const yearSlider = document.getElementById('yearSlider');
+            yearSlider.noUiSlider.set([1960, 2026]);
             currentPage = 1;
             loadCars(true);
         }, 10);
@@ -251,14 +309,6 @@ function setupFilterEvents() {
     const priceMax = document.getElementById('priceMax');
     const yearMin = document.getElementById('yearMin');
     const yearMax = document.getElementById('yearMax');
-
-    [priceMin, priceMax].forEach(slider => {
-        slider.addEventListener('input', updatePriceDisplay);
-    });
-
-    [yearMin, yearMax].forEach(slider => {
-        slider.addEventListener('input', updateYearDisplay);
-    });
 }
 
 // ------------------------
@@ -328,8 +378,7 @@ function showNotification(message, type = 'info') {
 // ------------------------
 document.addEventListener('DOMContentLoaded', async () => {
     await loadLookups();
-    updatePriceDisplay();
-    updateYearDisplay();
+    initializeSliders();
     setupFilterEvents();
     loadCars();
 });

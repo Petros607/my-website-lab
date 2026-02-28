@@ -395,3 +395,85 @@
 .photo-arrow-right {
     right: 5px;
 }
+
+/* Анимированные слайдеры */
+#priceSlider, #yearSlider {
+    margin: 20px 0 15px;
+    height: 6px;
+}
+
+.noUi-target {
+    background: #edf2f7;
+    border-radius: 10px;
+    border: none;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s;
+}
+
+.noUi-target:hover {
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.noUi-connect {
+    background: linear-gradient(90deg, #f56565, #ed64a6, #9f7aea);
+    background-size: 200% 100%;
+    animation: gradientMove 3s ease infinite;
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.noUi-handle {
+    border: 3px solid #fff;
+    border-radius: 50%;
+    background: #f56565;
+    box-shadow: 0 4px 10px rgba(245, 101, 101, 0.4);
+    width: 22px !important;
+    height: 22px !important;
+    right: -11px !important;
+    top: -8px !important;
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28), background 0.2s;
+}
+
+.noUi-handle:hover {
+    transform: scale(1.2) rotate(10deg);
+    background: #ed64a6;
+}
+
+.noUi-handle:active {
+    transform: scale(1.3);
+}
+
+.noUi-handle:before,
+.noUi-handle:after {
+    display: none;
+}
+
+.range-slider-values {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-top: 10px;
+    position: relative;
+}
+
+.range-slider-values span {
+    background: white;
+    padding: 6px 16px;
+    border-radius: 30px;
+    font-weight: 600;
+    color: #2d3748;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s;
+}
+
+.range-slider-values span:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    border-color: #cbd5e0;
+}

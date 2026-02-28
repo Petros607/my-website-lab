@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AutoLambada - Главная</title>
     <link rel="stylesheet" href="css/index.css">
+    <link href="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.js"></script>
 </head>
 <body>
     <header class="header">
@@ -58,27 +60,17 @@
 
                 <div class="index-filter-group">
                     <label class="index-filter-label">Цена (₽)</label>
-                    <div class="range-slider-container">
-                        <input type="range" id="priceMin" min="0" max="10000000" step="100000" value="0" class="range-slider range-min">
-                        <input type="range" id="priceMax" min="0" max="10000000" step="100000" value="10000000" class="range-slider range-max">
-                    </div>
+                    <div id="priceSlider"></div>
                     <div class="range-slider-values">
-                        <span class="range-value" id="price-min">0 ₽</span>
-                        <span class="range-separator">-</span>
-                        <span class="range-value" id="price-max">10 000 000 ₽</span>
+                        <span id="priceMin">0 ₽</span> - <span id="priceMax">10 000 000 ₽</span>
                     </div>
                 </div>
 
                 <div class="index-filter-group">
                     <label class="index-filter-label">Год выпуска</label>
-                    <div class="range-slider-container">
-                        <input type="range" id="yearMin" min="1960" max="2026" step="1" value="1960" class="range-slider range-min">
-                        <input type="range" id="yearMax" min="1960" max="2026" step="1" value="2026" class="range-slider range-max">
-                    </div>
+                    <div id="yearSlider"></div>
                     <div class="range-slider-values">
-                        <span class="range-value" id="year-min">1960</span>
-                        <span class="range-separator">-</span>
-                        <span class="range-value" id="year-max">2026</span>
+                        <span id="yearMin">1960</span> - <span id="yearMax">2026</span>
                     </div>
                 </div>
 
