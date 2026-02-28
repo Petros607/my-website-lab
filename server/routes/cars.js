@@ -5,9 +5,7 @@ const fs = require('fs');
 
 const router = express.Router();
 
-// --------------------
-// MULTER
-// --------------------
+
 if (!fs.existsSync('uploads')) {
     fs.mkdirSync('uploads');
 }
@@ -152,6 +150,54 @@ router.post('/', upload.array('photos', 5), async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Ошибка добавления' });
+    }
+});
+
+// --------------------
+// DELETE car
+// --------------------
+router.delete('/:id', async (req, res) => {
+    const client = await pool.connect();
+
+    try {
+        const carId = req.params.id;
+
+        await client.query('BEGIN');
+
+        const photosResult = await client.query(
+            'SELECT photo_url FROM car_photos WHERE car_id = $1',
+            [carId]
+        );
+
+        const photos = photosResult.rows;
+
+        const deleteResult = await client.query(
+            'DELETE FROM cars WHERE id = $1 RETURNING *',
+            [carId]
+        );
+
+        if (deleteResult.rowCount === 0) {
+            await client.query('ROLLBACK');
+            return res.status(404).json({ error: 'Авто не найдено' });
+        }
+
+        await client.query('COMMIT');
+
+        photos.forEach(photo => {
+            const filePath = photo.photo_url.replace('/uploads/', 'uploads/');
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+            }
+        });
+
+        res.json({ message: 'Авто удалено' });
+
+    } catch (error) {
+        await client.query('ROLLBACK');
+        console.error(error);
+        res.status(500).json({ error: 'Ошибка удаления' });
+    } finally {
+        client.release();
     }
 });
 
