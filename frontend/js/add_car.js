@@ -170,6 +170,40 @@ function validatePhotos() {
     return true;
 }
 
+function validateDescription() {
+        const description = document.getElementById("carDescription");
+        const descriptionError = document.getElementById("descriptionError");
+        
+        description.classList.remove('error');
+        descriptionError.style.display = 'none';
+        
+        if (description.value.length > 500) {
+            description.classList.add('error');
+            descriptionError.textContent = "Описание не должно превышать 500 символов";
+            descriptionError.style.display = 'block';
+            return false;
+        }
+        
+        return true;
+    }
+
+function validateAdditionalInfo() {
+    const additionalInfo = document.getElementById("additionalInfo");
+    const additionalInfoError = document.getElementById("additionalInfoError");
+    
+    additionalInfo.classList.remove('error');
+    additionalInfoError.style.display = 'none';
+    
+    if (additionalInfo.value.length > 500) {
+        additionalInfo.classList.add('error');
+        additionalInfoError.textContent = "Дополнительная информация не должна превышать 500 символов";
+        additionalInfoError.style.display = 'block';
+        return false;
+    }
+    
+    return true;
+}
+
 function validateForm() {
     let valid = true;
 
@@ -178,8 +212,16 @@ function validateForm() {
     else clearError(model);
 
     const year = Number(document.getElementById('carYear').value);
-    if (year < 1960 || year > new Date().getFullYear()) { setError(document.getElementById('carYear'), "Год выпуска некорректен"); valid = false; } 
+    if (year < 1960 || year > new Date().getFullYear()) { setError(document.getElementById('carYear'), "Год выпуска некорректен (должен быть с 1960)"); valid = false; } 
     else clearError(document.getElementById('carYear'));
+
+    const price = document.getElementById("carPrice");
+    if (!price.value || parseInt(price.value) < 10000) { setError(price, "Цена должна быть более 10000 руб."); valid = false; } 
+    else clearError(price);
+
+    const mileage = document.getElementById("carMileage");
+    if (!mileage.value || parseInt(mileage.value) < 0) { setError(mileage, "Пробег должен быть неотрицательным числом"); valid = false; } 
+    else clearError(mileage);
 
     if (!validateEngine()) valid = false;
     if (!validatePhotos()) valid = false;
@@ -191,6 +233,16 @@ function validateForm() {
     const transmission = document.getElementById('transmissionType');
     if (!transmission.value) { setError(transmission, "Выберите коробку"); valid = false; } 
     else clearError(transmission);
+
+    const color = document.getElementById("color");
+    if (!/^[А-Яа-яA-Za-z\-]{3,}$/.test(color.value)) {
+        setError(color, "Введите корректный цвет (минимум 3 буквы).");
+        valid = false;
+    } else clearError(color);
+
+    if (!validateAdditionalInfo()) {
+        valid = false;
+    }
 
     return valid;
 }
