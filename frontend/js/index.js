@@ -263,6 +263,13 @@ function renderCars(cars) {
         // ----------------------
         const favBtn = card.querySelector('.index-car-card-favorite-btn');
         favBtn.dataset.carId = car.id;
+
+        // Сначала устанавливаем временное состояние
+        favBtn.textContent = '🤍';
+
+        // Проверяем реальный статус
+        checkFavoriteStatus(car.id, favBtn);
+
         favBtn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -312,57 +319,132 @@ function setupFilterEvents() {
 }
 
 // ------------------------
-// Избранное (heart.js)
+// Избранное с сервером
 // ------------------------
-function toggleFavorite(btn) {
+async function toggleFavorite(btn) {
+    const carId = btn.dataset.carId;
     const isFavorite = btn.textContent === '❤️';
     
-    if (isFavorite) {
-        btn.textContent = '🤍';
-        btn.style.transform = 'scale(0.8)';
-        showNotification('Убрано из избранного', 'info');
-    } else {
-        btn.textContent = '❤️';
-        btn.style.animation = 'heartBeat 0.6s ease';
-        showNotification('Добавлено в избранное', 'success');
-        saveToFavorites(btn);
+    // Проверяем авторизацию
+    const token = localStorage.getItem('token');
+    
+    if (!token) {
+        // Если не авторизован, перенаправляем на страницу входа
+        showNotification('Необходимо авторизоваться', 'warning');
+        setTimeout(() => {
+            window.location.href = 'authPhone.html';
+        }, 1500);
+        return;
     }
     
-    setTimeout(() => {
-        btn.style.transform = 'scale(1)';
-        btn.style.animation = '';
-    }, 600);
+    try {
+        if (isFavorite) {
+            // Удаляем из избранного
+            const response = await fetch(`${API_URL}/favorites/${carId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            
+            if (!response.ok) {
+                const data = await response.json();
+                throw new Error(data.error || 'Ошибка при удалении');
+            }
+            
+            btn.textContent = '🤍';
+            btn.style.transform = 'scale(0.8)';
+            showNotification('Убрано из избранного', 'info');
+            
+        } else {
+            // Добавляем в избранное
+            const response = await fetch(`${API_URL}/favorites`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ car_id: carId })
+            });
+            
+            if (!response.ok) {
+                const data = await response.json();
+                throw new Error(data.error || 'Ошибка при добавлении');
+            }
+            
+            btn.textContent = '❤️';
+            btn.style.animation = 'heartBeat 0.6s ease';
+            showNotification('Добавлено в избранное', 'success');
+        }
+        
+        setTimeout(() => {
+            btn.style.transform = 'scale(1)';
+            btn.style.animation = '';
+        }, 600);
+        
+    } catch (error) {
+        console.error('Ошибка:', error);
+        showNotification(error.message, 'error');
+    }
 }
 
-function saveToFavorites(btn) {
-    const carCard = btn.closest('.index-car-card');
-    const carTitle = carCard.querySelector('.index-car-card-title').textContent;
-    const carPrice = carCard.querySelector('.index-car-card-price').textContent;
+// Проверка статуса избранного для автомобиля
+async function checkFavoriteStatus(carId, btn) {
+    const token = localStorage.getItem('token');
     
-    const favorites = JSON.parse(localStorage.getItem('carFavorites') || '[]');
-    favorites.push({
-        title: carTitle,
-        price: carPrice,
-        timestamp: new Date().toISOString()
-    });
+    if (!token) {
+        btn.textContent = '🤍'; // По умолчанию не в избранном
+        return;
+    }
     
-    localStorage.setItem('carFavorites', JSON.stringify(favorites));
+    try {
+        const response = await fetch(`${API_URL}/favorites/check/${carId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            btn.textContent = data.isFavorite ? '❤️' : '🤍';
+        }
+    } catch (error) {
+        console.error('Ошибка проверки статуса избранного:', error);
+        btn.textContent = '🤍';
+    }
 }
 
 function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
     notification.textContent = message;
+    
+    let backgroundColor;
+    switch(type) {
+        case 'success':
+            backgroundColor = '#4CAF50';
+            break;
+        case 'warning':
+            backgroundColor = '#ff9800';
+            break;
+        case 'error':
+            backgroundColor = '#f44336';
+            break;
+        default:
+            backgroundColor = '#2196F3';
+    }
+    
     notification.style.cssText = `
         position: fixed;
         top: 100px;
         right: 20px;
-        background: ${type === 'success' ? '#4CAF50' : '#2196F3'};
+        background: ${backgroundColor};
         color: white;
         padding: 15px 20px;
         border-radius: 5px;
         z-index: 1000;
         animation: slideIn 0.3s ease;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     `;
     
     document.body.appendChild(notification);

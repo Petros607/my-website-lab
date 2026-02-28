@@ -29,68 +29,25 @@
                     <div class="profile-icon">
                         <img src="images/profile-icon.svg" alt="Профиль пользователя" class="profile-image" width="300" height="300">
                     </div>
-                    <p class="profile-name">Алексей Иванов</p>
-                    <p class="profile-status">Покупатель</p>
+                    <p class="profile-name">Загрузка...</p>
+                    <p class="profile-status">Загрузка...</p>
                     
                     <div class="profile-contacts">
-                        <p class="profile-phone">Телефон: +7 (912) 345-67-89</p>
-                        <p class="profile-email">Email: alexey.ivanov@mail.com</p>
+                        <p class="profile-phone">Телефон: Загрузка...</p>
+                        <p class="profile-email">Email: Загрузка...</p>
                     </div>
 
                     <button onclick="logout()" class="profile-logout-btn">Выйти</button>
-
-                    <script src="js/index.js"></script>
-                    <script>
-                        // Проверяем, авторизован ли пользователь при загрузке профиля
-                        document.addEventListener('DOMContentLoaded', () => {
-                            if (!isAuthenticated()) {
-                                // Если не авторизован, перенаправляем на страницу входа
-                                window.location.href = 'authPhone.html';
-                            }
-                        });
-                    </script>
                 </div>
 
                 <!-- Правая колонка - избранное -->
                 <div class="profile-right-block">
                     <h1 class="profile-favourites-title">Избранные автомобили</h1>
                     <div class="profile-cars-list">
-                        <!-- Карточка автомобиля 1 -->
-                        <div class="profile-car-card">
-                            <div class="profile-car-image-container">
-                                <img src="images/cars/car3_0.jpg" alt="Kia Rio" class="profile-car-image" width="120" height="100">
-                            </div>
-                            <div class="profile-car-info">
-                                <h2 class="profile-car-title">Kia Rio, 2021</h2>
-                                <div class="profile-car-details">
-                                    <p class="profile-car-price"><strong>Цена:</strong> 1 000 000 ₽</p>
-                                    <!-- <p class="profile-car-transmission"><strong>Коробка:</strong> Автомат</p>
-                                    <p class="profile-car-color"><strong>Цвет:</strong> Серый</p> -->
-                                </div>
-                            </div>
-                            <button class="profile-favorite-btn">❤️</button>
+                        <!-- Автомобили будут загружены динамически -->
+                        <div class="profile-loading">
+                            Загрузка избранных автомобилей...
                         </div>
-
-                        <!-- Карточка автомобиля 2 -->
-                        <div class="profile-car-card">
-                            <div class="profile-car-image-container">
-                                <img src="images/cars/car2.jpg" alt="BMW X5" class="profile-car-image" width="150" height="100">
-                            </div>
-                            <div class="profile-car-info">
-                                <h2 class="profile-car-title">BMW X5 G05, 2022</h2>
-                                <div class="profile-car-details">
-                                    <p class="profile-car-price"><strong>Цена:</strong> 3 450 000 ₽</p>
-                                    <!-- <p class="profile-car-transmission"><strong>Коробка:</strong> Автомат</p>
-                                    <p class="profile-car-color"><strong>Цвет:</strong> Белый</p> -->
-                                </div>
-                            </div>
-                            <button class="profile-favorite-btn">❤️</button>
-                        </div>
-
-                        <!-- Сообщение если нет избранных -->
-                        <!-- <div class="profile-no-cars">
-                            У вас пока нет избранных машин
-                        </div> -->
                     </div>
                 </div>
             </div>
@@ -108,5 +65,7 @@
             <a href="about.html" class="footer-about-link">О нас</a>
         </div>
     </footer>
+
+    <script src="js/profile.js"></script>
 </body>
 </html>
