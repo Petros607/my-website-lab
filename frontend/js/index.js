@@ -143,15 +143,33 @@ function renderCars(cars) {
         const card = template.content.cloneNode(true);
 
         const img = card.querySelector('.index-car-card-image');
-        img.src = (car.photos && car.photos.length) ? `${API_URL}${car.photos[0].photo_url}` : `${API_URL}/uploads/default-car.jpg`;
+        const photos = (car.photos && car.photos.length) ? car.photos.map(p => `${API_URL}${p.photo_url}`) : [`${API_URL}/uploads/default-car.jpg`];
+        let currentPhotoIndex = 0;
+        img.src = photos[currentPhotoIndex];
         img.alt = car.brand_model;
+
+        const leftArrow = card.querySelector('.photo-arrow-left');
+        const rightArrow = card.querySelector('.photo-arrow-right');
+
+        leftArrow.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            currentPhotoIndex = (currentPhotoIndex - 1 + photos.length) % photos.length;
+            img.src = photos[currentPhotoIndex];
+        });
+
+        rightArrow.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
+            img.src = photos[currentPhotoIndex];
+        });
 
         card.querySelector('.index-car-card-title').textContent = car.brand_model;
         card.querySelector('.index-car-card-price').textContent = Number(car.price).toLocaleString('ru-RU') + ' ₽';
         card.querySelector('.index-car-card-mileage').textContent = car.mileage.toLocaleString() + ' км';
         card.querySelector('.index-car-card-engine').textContent = `${car.engine_volume} л / ${car.engine_power} л.с`;
         card.querySelector('.index-car-card-color').textContent = car.color;
-
         card.querySelector('.index-car-card-transmission').textContent = transmissionMap[car.transmission_id] || 'Неизвестно';
         card.querySelector('.index-car-card-body-type').textContent = bodyTypeMap[car.body_type_id] || 'Неизвестно';
 
@@ -163,7 +181,6 @@ function renderCars(cars) {
             e.stopPropagation();
             toggleFavorite(favBtn);
         });
-
 
         grid.appendChild(card);
     });

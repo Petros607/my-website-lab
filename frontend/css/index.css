@@ -358,3 +358,40 @@
 .suggestion-loading {
     animation: pulse 1.5s infinite;
 }
+
+.index-car-card-photo-wrapper {
+    position: relative;
+}
+
+.photo-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0,0,0,0.4);
+    color: white;
+    border: none;
+    font-size: 24px;
+    width: 30px;
+    height: 40px;
+    cursor: pointer;
+    z-index: 2;
+    border-radius: 4px;
+    user-select: none;
+    transition: transform 0.1s ease, background-color 0.1s ease;
+}
+
+.photo-arrow:hover {
+    background-color: rgba(0,0,0,0.6);
+}
+
+.photo-arrow:active {
+    transform: translateY(-50%) scale(0.9);
+}
+
+.photo-arrow-left {
+    left: 5px;
+}
+
+.photo-arrow-right {
+    right: 5px;
+}
