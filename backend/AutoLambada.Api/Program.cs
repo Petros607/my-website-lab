@@ -1,8 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using AutoLambada.Api.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
-
+var key = Encoding.UTF8.GetBytes(builder.Configuration["JWT_SECRET"] ?? "super_secret_key");
 var builder = WebApplication.CreateBuilder(args);
 
 // 🔹 Добавляем контроллеры (MVC)
@@ -19,6 +22,23 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     )
 );
 
+// 🔹 Регистрируем AuthService
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key)
+    };
+});
 
 // 🔹 CORS (чтобы frontend работал)
 builder.Services.AddCors(options =>
@@ -47,5 +67,8 @@ app.UseStaticFiles(); // для uploads (wwwroot)
 app.UseAuthorization();
 
 app.MapControllers(); // подключаем контроллеры
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();
