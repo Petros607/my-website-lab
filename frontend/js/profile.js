@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/api';
+const API_URL = 'http://localhost:5195/api';
 
 document.addEventListener('DOMContentLoaded', async () => {
     // Проверяем авторизацию
@@ -128,18 +128,18 @@ function createFavoriteCarCard(car) {
     card.innerHTML = `
         <div class="profile-car-image-container">
             <img src="${photoUrl}" 
-                 alt="${car.brand_model}" 
+                 alt="${car.brandModel}" 
                  class="profile-car-image" 
                  width="120" 
                  height="100"
                  onerror="this.src='images/default-car.jpg'">
         </div>
         <div class="profile-car-info">
-            <h2 class="profile-car-title">${car.brand_model} ${year}</h2>
+            <h2 class="profile-car-title">${car.brandModel} ${year}</h2>
             <div class="profile-car-details">
                 <p class="profile-car-price"><strong>Цена:</strong> ${formattedPrice}</p>
                 <p class="profile-car-specs">
-                    ${car.engine_volume} л / ${car.engine_power} л.с • 
+                    ${car.engineVolume} л / ${car.enginePower} л.с • 
                     ${car.mileage.toLocaleString()} км
                 </p>
             </div>

@@ -1,15 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using AutoLambada.Api.Data;
+using AutoLambada.Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var key = Encoding.UTF8.GetBytes(builder.Configuration["JWT_SECRET"] ?? "super_secret_key");
+var key = Encoding.UTF8.GetBytes(builder.Configuration["JWT_SECRET"] ?? "super_secret_key_that_is_long_enough_1234");
 
 // 🔹 Добавляем контроллеры (MVC)
 builder.Services.AddControllers();
+builder.Services.AddScoped<AuthService>();
 
 // 🔹 Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -68,6 +70,7 @@ app.UseStaticFiles();
 app.UseHttpsRedirection();
 
 // 🔹 Аутентификация и авторизация
+app.UseRouting();
 app.UseAuthentication(); // 🔹 ОБЯЗАТЕЛЬНО до UseAuthorization
 app.UseAuthorization();
 

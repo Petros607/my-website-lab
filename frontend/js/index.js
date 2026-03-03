@@ -8,6 +8,8 @@ let carsData = [];
 let currentPage = 1;
 const PAGE_SIZE = 6;
 
+console.log('Инициализация index.js, API_URL =', API_URL);
+
 // ------------------------
 // Range-слайдеры: обновление отображения
 // ------------------------
@@ -92,6 +94,7 @@ async function loadLookups() {
     try {
         const res = await fetch(`${API_URL}/filters`);
         const data = await res.json();
+        console.log(data);
 
         fillSelect('filterTransmission', data.transmissions);
         fillSelect('filterBodyType', data.bodies);
@@ -101,8 +104,8 @@ async function loadLookups() {
         const colorSelect = document.getElementById('filterColor');
         colors.forEach(c => {
             const option = document.createElement('option');
-            option.value = c.color;
-            option.textContent = c.color;
+            option.value = c;
+            option.textContent = c;
             colorSelect.appendChild(option);
         });
 
@@ -193,7 +196,7 @@ function renderCars(cars) {
         // ----------------------
         const img = card.querySelector('.index-car-card-image');
         const photos = (car.photos && car.photos.length) 
-            ? car.photos.map(p => `${API_URL}${p.photo_url}`) 
+            ? car.photos.map(p => `${API_URL}${p.photoUrl}`) 
             : [`${API_URL}/uploads/default-car.jpg`];
         let currentPhotoIndex = 0;
         img.src = photos[currentPhotoIndex];
@@ -225,21 +228,21 @@ function renderCars(cars) {
         // ----------------------
         // Текстовые данные
         // ----------------------
-        card.querySelector('.index-car-card-title').textContent = car.brand_model;
+        card.querySelector('.index-car-card-title').textContent = car.brandModel;
         card.querySelector('.index-car-card-price').textContent = Number(car.price).toLocaleString('ru-RU') + ' ₽';
         card.querySelector('.index-car-card-mileage').textContent = car.mileage.toLocaleString() + ' км';
-        card.querySelector('.index-car-card-engine').textContent = `${car.engine_volume} л / ${car.engine_power} л.с`;
+        card.querySelector('.index-car-card-engine').textContent = `${car.engineVolume} л / ${car.enginePower} л.с`;
         card.querySelector('.index-car-card-color').textContent = car.color;
-        card.querySelector('.index-car-card-transmission').textContent = transmissionMap[car.transmission_id] || 'Неизвестно';
-        card.querySelector('.index-car-card-body-type').textContent = bodyTypeMap[car.body_type_id] || 'Неизвестно';
+        card.querySelector('.index-car-card-transmission').textContent = transmissionMap[car.transmissionId] || 'Неизвестно';
+        card.querySelector('.index-car-card-body-type').textContent = bodyTypeMap[car.bodyTypeId] || 'Неизвестно';
 
         // ----------------------
         // Динамически добавляем additional info
         // ----------------------
         const infoContainer = card.querySelector('.index-car-card-additional-info');
         infoContainer.innerHTML = ''; // на случай перерендера
-        if (car.additional_info) {
-            const features = car.additional_info.split(',').map(f => f.trim());
+        if (car.additionalInfo) {
+            const features = car.additionalInfo.split(',').map(f => f.trim());
             features.forEach(f => {
                 const span = document.createElement('span');
                 span.className = 'index-car-card-feature';

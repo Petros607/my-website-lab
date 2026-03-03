@@ -20,7 +20,7 @@ public class AuthService
         _config = config;
     }
 
-    private string JwtSecret => _config["JWT_SECRET"] ?? "super_secret_key";
+    private string JwtSecret => _config["JWT_SECRET"] ?? "super_secret_key_that_is_long_enough_1234";
 
     public async Task<User?> GetUserByLoginAsync(string login)
     {
@@ -28,9 +28,13 @@ public class AuthService
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == login);
 
         var cleanPhone = new string(login.Where(char.IsDigit).ToArray());
-        return await _context.Users.FirstOrDefaultAsync(u =>
+
+        var users = await _context.Users.ToListAsync();
+
+        return users.FirstOrDefault(u =>
             u.Phone == login || new string(u.Phone.Where(char.IsDigit).ToArray()) == cleanPhone);
     }
+
 
     public string GenerateJwt(User user)
     {
