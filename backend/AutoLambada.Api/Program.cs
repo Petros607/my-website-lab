@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using AutoLambada.Api.Data;
-using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-var key = Encoding.UTF8.GetBytes(builder.Configuration["JWT_SECRET"] ?? "super_secret_key");
 var builder = WebApplication.CreateBuilder(args);
+
+var key = Encoding.UTF8.GetBytes(builder.Configuration["JWT_SECRET"] ?? "super_secret_key");
 
 // 🔹 Добавляем контроллеры (MVC)
 builder.Services.AddControllers();
@@ -22,7 +22,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     )
 );
 
-// 🔹 Регистрируем AuthService
+// 🔹 JWT аутентификация
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -40,7 +40,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// 🔹 CORS (чтобы frontend работал)
+// 🔹 CORS (чтобы фронт работал)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",
@@ -51,24 +51,27 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// 🔹 Middleware
+// 🔹 Swagger
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+// 🔹 CORS
 app.UseCors("AllowAll");
 
+// 🔹 Статика (wwwroot/uploads)
+app.UseStaticFiles();
+
+// 🔹 HTTPS редирект
 app.UseHttpsRedirection();
 
-app.UseStaticFiles(); // для uploads (wwwroot)
-
+// 🔹 Аутентификация и авторизация
+app.UseAuthentication(); // 🔹 ОБЯЗАТЕЛЬНО до UseAuthorization
 app.UseAuthorization();
 
-app.MapControllers(); // подключаем контроллеры
-
-app.UseAuthentication();
-app.UseAuthorization();
+// 🔹 Маршрутизация контроллеров
+app.MapControllers();
 
 app.Run();
