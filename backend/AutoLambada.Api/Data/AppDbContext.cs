@@ -20,11 +20,20 @@ namespace AutoLambada.Api.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // composite key для favorites
+            // 🔹 Указываем реальные имена таблиц в PostgreSQL
+            modelBuilder.Entity<Car>().ToTable("cars");
+            modelBuilder.Entity<FuelType>().ToTable("fuel_types");
+            modelBuilder.Entity<BodyType>().ToTable("body_types");
+            modelBuilder.Entity<TransmissionType>().ToTable("transmission_types");
+            modelBuilder.Entity<CarPhoto>().ToTable("car_photos");
+            modelBuilder.Entity<User>().ToTable("users");
+            modelBuilder.Entity<Favorite>().ToTable("favorites");
+
+            // 🔹 Composite key для favorites
             modelBuilder.Entity<Favorite>()
                 .HasKey(f => new { f.UserId, f.CarId });
 
-            // связи
+            // 🔹 Связи favorites → user/car
             modelBuilder.Entity<Favorite>()
                 .HasOne(f => f.User)
                 .WithMany(u => u.Favorites)
