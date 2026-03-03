@@ -417,5 +417,114 @@ FodyWeavers.xsd
 *.msm
 *.msp
 
+## .NET Core
+*.swp
+*.swo
+*.*~
+project.lock.json
+.DS_Store
+*.pyc
+nupkg/
+
+# Visual Studio Code
+.vscode
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+## Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+msbuild.log
+msbuild.err
+msbuild.wrn
+
+## Visual Studio
+.vs/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+## Paket dependency manager
+.paket/
+paket-files/
+
+## JetBrains Rider
+.idea/
+*.sln.iml
+
+## SonarQube
+.sonarqube/
+
+## ASP.NET Core
+appsettings.Production.json
+appsettings.*.json
+!appsettings.json
+!appsettings.Development.json
+
+## Entity Framework Core
+/Migrations/SeedData/
+*.db
+*.mdf
+*.ldf
+
+## NPM
+node_modules/
+package-lock.json
+yarn.lock
+yarn-error.log
+
+## Operating System Files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+
+## User-specific files
+*.rsuser
+*.tmp
+*.log
+*.local
+*.vspscc
+*.vssscc
+.cache/
+*.pidb
+*.svclog
+*.scc
+
+## Linux
+*~
+.fuse_hidden*
+.directory*
+.Trash-*
+.nfs*
+
+## macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+__MACOSX/
+
 old/
 uploads/

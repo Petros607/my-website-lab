@@ -1,0 +1,6 @@
+@AutoLambada.Api_HostAddress = http://localhost:5195
+
+GET {{AutoLambada.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
