@@ -110,13 +110,14 @@ function renderFavoriteCars(cars) {
 }
 
 function createFavoriteCarCard(car) {
+    console.log(car);
     const card = document.createElement('div');
     card.className = 'profile-car-card';
     card.dataset.carId = car.id;
 
     // Получаем первое фото или используем заглушку
     const photoUrl = car.photos && car.photos.length > 0 
-        ? `${API_URL}${car.photos[0].photo_url}`
+        ? `${API_URL}${car.photos[0].photoUrl}`
         : 'images/default-car.jpg';
 
     // Форматируем цену
@@ -138,14 +139,15 @@ function createFavoriteCarCard(car) {
             <h2 class="profile-car-title">${car.brandModel} ${year}</h2>
             <div class="profile-car-details">
                 <p class="profile-car-price"><strong>Цена:</strong> ${formattedPrice}</p>
-                <p class="profile-car-specs">
-                    ${car.engineVolume} л / ${car.enginePower} л.с • 
-                    ${car.mileage.toLocaleString()} км
-                </p>
             </div>
         </div>
         <button class="profile-favorite-btn" data-car-id="${car.id}">❤️</button>
     `;
+
+    // <p class="profile-car-specs">
+    //                 ${car.engineVolume} л / ${car.enginePower} л.с •
+    //                 ${car.mileage.toLocaleString()} км
+    //             </p>
 
     // Добавляем обработчик для кнопки удаления из избранного
     const favBtn = card.querySelector('.profile-favorite-btn');
