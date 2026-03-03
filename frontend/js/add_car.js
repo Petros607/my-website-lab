@@ -258,17 +258,17 @@ function initForm() {
         if (!validateForm()) return scrollToFirstError();
 
         const formData = new FormData();
-        formData.append('brand_model', document.getElementById('carModel').value);
-        formData.append('year', document.getElementById('carYear').value);
-        formData.append('price', document.getElementById('carPrice').value);
-        formData.append('mileage', document.getElementById('carMileage').value);
-        formData.append('engine_volume', document.getElementById('engineVolume').value);
-        formData.append('engine_power', document.getElementById('enginePower').value);
-        formData.append('fuel_type_id', document.getElementById('fuelType').value);
-        formData.append('body_type_id', document.getElementById('bodyType').value);
-        formData.append('transmission_id', document.getElementById('transmissionType').value);
-        formData.append('color', document.getElementById('color').value);
-        formData.append('additional_info', document.getElementById('additionalInfo').value);
+        formData.append('BrandModel', document.getElementById('carModel').value);
+        formData.append('Year', document.getElementById('carYear').value);
+        formData.append('Price', document.getElementById('carPrice').value);
+        formData.append('Mileage', document.getElementById('carMileage').value);
+        formData.append('EngineVolume', document.getElementById('engineVolume').value);
+        formData.append('EnginePower', document.getElementById('enginePower').value);
+        formData.append('FuelTypeId', document.getElementById('fuelType').value);
+        formData.append('BodyTypeId', document.getElementById('bodyType').value);
+        formData.append('TransmissionId', document.getElementById('transmissionType').value);
+        formData.append('Color', document.getElementById('color').value);
+        formData.append('AdditionalInfo', document.getElementById('additionalInfo').value);
 
         // Добавляем все файлы из массива
         selectedFiles.forEach(file => formData.append('photos', file));

@@ -82,10 +82,9 @@ public class CarsController : ControllerBase
     }
 
     // =========================================================
-    // POST /api/cars
+    // POST /api/cars    [Authorize(Roles = "admin")]
     // =========================================================
     [HttpPost]
-    [Authorize(Roles = "admin")]
     public async Task<IActionResult> CreateCar([FromForm] CarCreateDto dto)
     {
         var car = new Car
@@ -109,7 +108,7 @@ public class CarsController : ControllerBase
         // --- Фото ---
         if (dto.Photos != null && dto.Photos.Count > 0)
         {
-            string uploadPath = Path.Combine(_env.WebRootPath, "uploads");
+            string uploadPath = Path.Combine(_env.WebRootPath, "api/uploads");
 
             if (!Directory.Exists(uploadPath))
                 Directory.CreateDirectory(uploadPath);
@@ -141,10 +140,9 @@ public class CarsController : ControllerBase
     }
 
     // =========================================================
-    // DELETE /api/cars/{id}
+    // DELETE /api/cars/{id} ([Authorize(Roles = "admin")])
     // =========================================================
     [HttpDelete("{id}")]
-    [Authorize(Roles = "admin")]
     public async Task<IActionResult> DeleteCar(int id)
     {
         var car = await _context.Cars
@@ -159,6 +157,7 @@ public class CarsController : ControllerBase
         {
             var filePath = Path.Combine(
                 _env.WebRootPath,
+                "api",
                 photo.PhotoUrl.TrimStart('/')
             );
 

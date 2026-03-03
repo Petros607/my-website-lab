@@ -118,7 +118,7 @@ async function checkAvailability(type, value) {
         const response = await fetch(`${API_URL}/auth/check-${type}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ [type]: value })
+            body: JSON.stringify(value)
         });
 
         const data = await response.json();
@@ -324,7 +324,7 @@ function initRegisterForm() {
             const usernameCheck = await fetch(`${API_URL}/auth/check-username`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username })
+                body: JSON.stringify(username)
             });
             const usernameData = await usernameCheck.json();
             
@@ -337,7 +337,7 @@ function initRegisterForm() {
             const emailCheck = await fetch(`${API_URL}/auth/check-email`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email })
+                body: JSON.stringify(email)
             });
             const emailData = await emailCheck.json();
             
@@ -350,7 +350,7 @@ function initRegisterForm() {
             const phoneCheck = await fetch(`${API_URL}/auth/check-phone`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ phone })
+                body: JSON.stringify(phone)
             });
             const phoneData = await phoneCheck.json();
             
