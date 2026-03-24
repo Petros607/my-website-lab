@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000/api';
+import { API_URL } from './config.js';
 
 let transmissionMap = {};
 let bodyTypeMap = {};
@@ -79,13 +79,6 @@ function initializeSliders() {
         yearMaxEl.textContent = max;
     });
 }
-
-
-// Функция форматирования цены
-function formatPrice(price) {
-    return new Intl.NumberFormat('ru-RU').format(price) + ' ₽';
-}
-
 
 // ------------------------
 // Загрузка справочников и фильтров
@@ -357,12 +350,26 @@ async function toggleFavorite(btn) {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ car_id: carId })
+                body: JSON.stringify(Number(carId))
             });
             
             if (!response.ok) {
-                const data = await response.json();
-                throw new Error(data.error || 'Ошибка при добавлении');
+                let errorText;
+
+                try {
+                    const data = await response.json();
+                    errorText = data.error || JSON.stringify(data);
+                } catch (e) {
+                    errorText = await response.text();
+                }
+
+                console.error('Ошибка ответа сервера:', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    body: errorText
+                });
+
+                throw new Error(`Ошибка ${response.status}: ${errorText}`);
             }
             
             btn.textContent = '❤️';
