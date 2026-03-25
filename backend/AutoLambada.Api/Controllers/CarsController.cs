@@ -108,7 +108,7 @@ public class CarsController : ControllerBase
         // --- Фото ---
         if (dto.Photos != null && dto.Photos.Count > 0)
         {
-            string uploadPath = Path.Combine(_env.WebRootPath, "api/uploads");
+            string uploadPath = Path.Combine(_env.WebRootPath, "uploads");
 
             if (!Directory.Exists(uploadPath))
                 Directory.CreateDirectory(uploadPath);
@@ -157,7 +157,7 @@ public class CarsController : ControllerBase
         {
             var filePath = Path.Combine(
                 _env.WebRootPath,
-                "api",
+                //"api", //TODO: без api (просто папка uploads)
                 photo.PhotoUrl.TrimStart('/')
             );
 

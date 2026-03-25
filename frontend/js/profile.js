@@ -1,4 +1,5 @@
 import { API_URL } from './config.js';
+import { MAIN_URL } from './config.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     // Проверяем авторизацию
@@ -117,8 +118,8 @@ function createFavoriteCarCard(car) {
 
     // Получаем первое фото или используем заглушку
     const photoUrl = car.photos && car.photos.length > 0 
-        ? `${API_URL}${car.photos[0].photoUrl}`
-        : 'images/default-car.jpg';
+        ? `${MAIN_URL}${car.photos[0].photoUrl.substring(1)}`
+        : `${MAIN_URL}uploads/default-car.jpg`;
 
     // Форматируем цену
     const formattedPrice = Number(car.price).toLocaleString('ru-RU') + ' ₽';

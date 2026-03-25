@@ -1,4 +1,5 @@
 import { API_URL } from './config.js';
+import { MAIN_URL } from './config.js';
 
 let transmissionMap = {};
 let bodyTypeMap = {};
@@ -189,8 +190,8 @@ function renderCars(cars) {
         // ----------------------
         const img = card.querySelector('.index-car-card-image');
         const photos = (car.photos && car.photos.length) 
-            ? car.photos.map(p => `${API_URL}${p.photoUrl}`) 
-            : [`${API_URL}/uploads/default-car.jpg`];
+            ? car.photos.map(p => `${MAIN_URL}${p.photoUrl.substring(1)}`) 
+            : [`${MAIN_URL}uploads/default-car.jpg`];
         let currentPhotoIndex = 0;
         img.src = photos[currentPhotoIndex];
         img.alt = car.brand_model;
